@@ -18,6 +18,13 @@ jobs:
 
     - name: Install dependencies
       run: flutter pub get
+    
+    - name: Install Ninja
+      run: sudo apt-get install ninja-build
+
+    - name: Set CMAKE_MAKE_PROGRAM
+      run: export CMAKE_MAKE_PROGRAM=/usr/bin/ninja
+      if: runner.os == 'Linux'
 
     - name: Build and test for Linux (x64)
       run: flutter build linux --debug
