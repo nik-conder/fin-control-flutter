@@ -19,10 +19,6 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build and test for macOS (arm64)
-      run: flutter build macos --debug --target-platform=macos-arm64
-      if: runner.os == 'macOS'
-
-    - name: Build and test for macOS (x86_64)
-      run: flutter build macos --debug --target-platform=macos-x64
+    - name: Build and test for macOS
+      run: flutter build macos --debug
       if: runner.os == 'macOS'

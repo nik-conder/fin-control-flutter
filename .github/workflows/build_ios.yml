@@ -19,10 +19,6 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build and test for iOS (arm64)
-      run: flutter build ios --debug --target-platform=ios-arm64
-      if: runner.os == 'macOS'
-
-    - name: Build and test for iOS (x86_64)
-      run: flutter build ios --debug --target-platform=ios-x86_64
+    - name: Build and test for iOS
+      run: flutter build ios --debug
       if: runner.os == 'macOS'

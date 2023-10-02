@@ -19,10 +19,6 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build and test for Windows (x64)
-      run: flutter build windows --debug --target-platform=x64
-      if: runner.os == 'Windows'
-
-    - name: Build and test for Windows (x86)
-      run: flutter build windows --debug --target-platform=x86
+    - name: Build and test for Windows
+      run: flutter build windows --debug 
       if: runner.os == 'Windows'

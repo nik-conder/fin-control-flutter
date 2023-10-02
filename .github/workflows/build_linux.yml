@@ -19,10 +19,6 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build and test for Linux (x86)
-      run: flutter build linux --debug --target-platform=linux-x86
-      if: runner.os == 'Linux'
-
     - name: Build and test for Linux (x64)
-      run: flutter build linux --debug --target-platform=linux-x64
+      run: flutter build linux --debug
       if: runner.os == 'Linux'
