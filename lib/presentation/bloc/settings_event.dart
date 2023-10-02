@@ -2,7 +2,9 @@ part of 'settings_bloc.dart';
 
 abstract class SettingsEvent {}
 
-class DarkModeEvent extends SettingsEvent {
+class SetDarkModeEvent extends SettingsEvent {
   final bool isDarkMode;
-  DarkModeEvent({required this.isDarkMode});
+  SetDarkModeEvent({required this.isDarkMode});
 }
+
+class GetDarkModeEvent extends SettingsEvent {}

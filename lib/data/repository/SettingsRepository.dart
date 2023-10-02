@@ -6,15 +6,12 @@ class SettingsRepository {
 
   SettingsRepository(this.settingsDao);
 
-  Future<void> saveDarkModeSetting(bool isDarkMode) async {
-    final result = await settingsDao.getSettings();
-    print(result);
-    print("...");
+  Future<int> updateDarkModeSetting(bool isDarkMode) async {
+    return await settingsDao.updateDarkModeSetting((isDarkMode) ? 1 : 0);
   }
 
-  Future<Settings> getSettings() async {
-    final result = await settingsDao.getSettings();
-    print(result.isDarkMode);
-    return Settings(isDarkMode: result.isDarkMode);
+  Future<int> getDarkModeSetting() async {
+    final result = await settingsDao.getDarkModeSetting();
+    return result;
   }
 }

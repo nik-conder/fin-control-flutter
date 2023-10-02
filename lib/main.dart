@@ -37,8 +37,8 @@ void setupDatabaseFactory() {
 }
 
 void main() {
+  setupDatabaseFactory();
   setupDependencies();
-  setupDatabaseFactory(); // Инициализируем databaseFactory
   runApp(const MyApp());
 }
 

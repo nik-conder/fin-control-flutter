@@ -7,23 +7,49 @@ class SettingsDao {
 
   SettingsDao(this.databaseManager);
 
-  Future<void> saveSettings(Settings settings) async {
+  Future<int> insertSettings(Settings settings) async {
     final database = await databaseManager.initializeDB();
-    await database.insert(
-      'settings',
-      {'isDarkMode': settings.isDarkMode ? 1 : 0},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+
+    try {
+      final result = await database.rawInsert(
+          'INSERT INTO settings (id, isDarkMode) VALUES (?, ?)',
+          [settings.id, settings.isDarkMode]);
+      print('Inserted Rows: $result');
+      return result;
+    } catch (e) {
+      print('Error inserting rows: $e');
+      return 0;
+    }
   }
 
-  Future<Settings> getSettings() async {
+  Future<int> updateDarkModeSetting(int isDarkMode) async {
     final database = await databaseManager.initializeDB();
-    final result = await database.query('settings');
-    if (result.isNotEmpty) {
-      final isDarkMode = result.first['isDarkMode'] == 1;
-      return Settings(isDarkMode: isDarkMode);
+
+    try {
+      final updatedRows = await database
+          .update('settings', {'isDarkMode': isDarkMode}, where: 'id = 1');
+      print('Updated Rows: $updatedRows');
+
+      return updatedRows;
+    } catch (e) {
+      print('Error updating rows: $e');
+      return 0;
     }
-    return const Settings(
-        isDarkMode: false); // Default value if no settings found
+  }
+
+  Future<int> getDarkModeSetting() async {
+    try {
+      final database = await databaseManager.initializeDB();
+      final result = await database.query('settings', columns: ['isDarkMode']);
+
+      if (result.isNotEmpty) {
+        return result.first['isDarkMode'] as int;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      print('Error getting dark mode setting: $e');
+      return 0;
+    }
   }
 }

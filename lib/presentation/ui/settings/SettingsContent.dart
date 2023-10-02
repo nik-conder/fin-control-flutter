@@ -28,7 +28,7 @@ class SettingsContent extends StatelessWidget {
                     'какое то большое описание данной настройки на сколько то там символов крч ты понял нет',
                 onClick: (newValue) => {
                   BlocProvider.of<SettingsBloc>(context)
-                      .add(DarkModeEvent(isDarkMode: !state.isDarkMode)),
+                      .add(SetDarkModeEvent(isDarkMode: !state.isDarkMode)),
                 },
               ),
               const Divider(

@@ -24,7 +24,7 @@ class SQLiteDatabase implements DatabaseManager {
       join(path, _databaseName),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE IF NOT EXISTS settings(isDarkMode INTEGER NOT NULL)",
+          " CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)",
         );
       },
       version: _version,
@@ -32,26 +32,4 @@ class SQLiteDatabase implements DatabaseManager {
 
     return database;
   }
-
-  /*
-  @override
-Future<Database> initializeDB() async {
-  // Initialize the database factory
-  databaseFactory = databaseFactoryFfi;
-
-  String path = await getDatabasesPath();
-
-  Database database = await openDatabase(
-    join(path, _databaseName),
-    onCreate: (database, version) async {
-      await database.execute(
-        "CREATE TABLE IF NOT EXISTS settings(isDarkMode INTEGER NOT NULL)",
-      );
-    },
-    version: _version,
-  );
-
-  return database;
-}
-*/
 }

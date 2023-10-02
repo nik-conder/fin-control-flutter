@@ -6,14 +6,13 @@ class DarkModeUseCase {
 
   DarkModeUseCase(this.settingsRepository);
 
-  void isDarkMode(bool isDarkMode) {
-    final result = settingsRepository.saveDarkModeSetting(isDarkMode);
-    print(result);
+  Future<int> isDarkMode(bool isDarkMode) {
+    final result = settingsRepository.updateDarkModeSetting(isDarkMode);
+    return result;
   }
 
-  Future<Settings> getDarkMode() {
-    final result = settingsRepository.getSettings();
-    print("dark mode: ${result}");
+  Future<int> getDarkMode() {
+    final result = settingsRepository.getDarkModeSetting();
     return result;
   }
 }
