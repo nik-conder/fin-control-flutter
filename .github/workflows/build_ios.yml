@@ -1,0 +1,28 @@
+name: Build (iOS)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v1
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build and test for iOS (arm64)
+      run: flutter build ios --debug --target-platform=ios-arm64
+      if: runner.os == 'macOS'
+
+    - name: Build and test for iOS (x86_64)
+      run: flutter build ios --debug --target-platform=ios-x86_64
+      if: runner.os == 'macOS'

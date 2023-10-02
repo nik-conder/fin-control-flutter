@@ -1,0 +1,36 @@
+name: Build (Android)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v1
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build and test for Android (arm64-v8a)
+      run: flutter build apk --debug --target-platform=android-arm64
+      if: runner.os == 'Linux'
+
+    - name: Build and test for Android (armeabi-v7a)
+      run: flutter build apk --debug --target-platform=android-arm
+      if: runner.os == 'Linux'
+
+    - name: Build and test for Android (x86_64)
+      run: flutter build apk --debug --target-platform=android-x64
+      if: runner.os == 'Linux'
+
+    - name: Build and test for Android (x86)
+      run: flutter build apk --debug --target-platform=android-x86
+      if: runner.os == 'Linux'
