@@ -19,8 +19,10 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
     
-    - name: Install Ninja
-      run: sudo apt-get install ninja-build
+    - name: Install Ninja and other dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install cmake pkg-config libgtk-3-dev libcairo2-dev libgl1-mesa-dev libgles2-mesa-dev ninja-build -y
 
     - name: Set CMAKE_MAKE_PROGRAM
       run: export CMAKE_MAKE_PROGRAM=/usr/bin/ninja
