@@ -1,37 +1,54 @@
+import 'package:fin_control/DependencyInjector.dart';
 import 'package:fin_control/data/dataProvider/DAO/SettingsDAO.dart';
+import 'package:fin_control/data/models/Settings.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:get_it/get_it.dart';
 
 void main() {
   group('SettingsRepository Tests', () {
-    late SettingsDaoMock settingsDaoMock;
+    GetIt getIt = GetIt.instance;
+
+    //late SettingsDaoMock settingsDaoMock;
+    late SettingsDao settingsDao;
 
     setUp(() {
-      settingsDaoMock = SettingsDaoMock();
+      DependencyInjector.setup();
+      settingsDao = getIt<SettingsDao>();
     });
 
-    test('Update Dark Mode Setting', () async {
-      final updatedRows = await settingsDaoMock.getDarkModeSetting();
+    test('Insert Setting', () async {
+      final settings = Settings(id: 1, isDarkMode: 1);
+      final insertedRows = await settingsDao.insertSettings(settings);
 
-      expect(updatedRows, isIn([0, 1]));
+      expect(insertedRows, 1);
     });
 
-    test('Get Dark Mode Setting', () async {
-      final darkModeSetting = await settingsDaoMock.getDarkModeSetting();
+    test('Update option "Dark Mode', () async {
+      final updatedRows = await settingsDao.updateDarkModeSetting(1);
 
-      expect(darkModeSetting, isIn([0, 1]));
+      expect(updatedRows, 1);
+    });
+
+    test('Get option "Dark Mode', () async {
+      final darkModeSetting = await settingsDao.getDarkModeSetting();
+
+      expect(darkModeSetting, 1);
+    });
+
+    tearDown(() {
+      getIt.reset();
     });
   });
 }
 
-class SettingsDaoMock extends Mock implements SettingsDao {
-  @override
-  Future<int> updateDarkModeSetting(int isDarkMode) {
-    return Future.value(1);
-  }
+// class SettingsDaoMock extends Mock implements SettingsDao {
+//   @override
+//   Future<int> updateDarkModeSetting(int isDarkMode) {
+//     return Future.value(1);
+//   }
 
-  @override
-  Future<int> getDarkModeSetting() {
-    return Future.value(0);
-  }
-}
+//   @override
+//   Future<int> getDarkModeSetting() {
+//     return Future.value(1);
+//   }
+// }

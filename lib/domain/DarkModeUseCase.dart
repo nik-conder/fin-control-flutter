@@ -1,4 +1,3 @@
-import 'package:fin_control/data/models/Settings.dart';
 import 'package:fin_control/data/repository/SettingsRepository.dart';
 
 class DarkModeUseCase {

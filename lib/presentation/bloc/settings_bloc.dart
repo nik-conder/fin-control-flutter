@@ -1,4 +1,3 @@
-import 'package:fin_control/data/models/Settings.dart';
 import 'package:fin_control/domain/DarkModeUseCase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,11 +14,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   _setDarkMode(SetDarkModeEvent event, Emitter<SettingsState> emit) {
-    final result = _darkModeUseCase.isDarkMode(event.isDarkMode);
     emit(state.copyWith(isDarkMode: (event.isDarkMode ? true : false)));
   }
 
-  void _getDarkMode(GetDarkModeEvent event, Emitter<SettingsState> emit) async {
+  _getDarkMode(GetDarkModeEvent event, Emitter<SettingsState> emit) async {
     try {
       int isDarkMode = await _darkModeUseCase.getDarkMode();
       emit(state.copyWith(isDarkMode: (isDarkMode == 1) ? true : false));

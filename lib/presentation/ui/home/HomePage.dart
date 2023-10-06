@@ -1,4 +1,8 @@
+import 'package:fin_control/Config.dart';
 import 'package:fin_control/presentation/bloc/home_bloc.dart';
+import 'package:fin_control/presentation/bloc/theme_bloc.dart';
+import 'package:fin_control/presentation/bloc/theme_event.dart';
+import 'package:fin_control/presentation/bloc/theme_state.dart';
 import 'package:fin_control/presentation/ui/home/FootHomeComponent.dart';
 import 'package:fin_control/presentation/ui/home/HeadHomeComponent.dart';
 import 'package:flutter/material.dart';
@@ -10,21 +14,37 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text('FinControl'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.dark_mode_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
-            },
-            icon: const Icon(Icons.settings_outlined),
-          )
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return AppBar(
+              title: const Text(GeneralConfig.appName),
+              actions: [
+                Tooltip(
+                    message: (state.isDarkMode) ? 'Light mode' : 'Dark mode',
+                    child: IconButton(
+                      onPressed: () {
+                        BlocProvider.of<ThemeBloc>(context)
+                            .add(UpdateThemeEvent());
+                      },
+                      icon: (state.isDarkMode)
+                          ? const Icon(Icons.light_mode_outlined)
+                          : const Icon(Icons.dark_mode_outlined),
+                    )),
+                Tooltip(
+                    message: 'Settings',
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
+                      icon: const Icon(Icons.settings_outlined),
+                    ))
+              ],
+              backgroundColor: Theme.of(context).colorScheme.background,
+            );
+          },
+        ),
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {

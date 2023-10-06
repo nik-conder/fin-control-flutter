@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HeadHomeComponent extends StatelessWidget {
   final double balance;
@@ -7,8 +6,9 @@ class HeadHomeComponent extends StatelessWidget {
   final void Function() onPressed;
   final void Function() onBalanceIsVisibile;
 
-  HeadHomeComponent(
-      {required this.balance,
+  const HeadHomeComponent(
+      {super.key,
+      required this.balance,
       required this.onPressed,
       required this.onBalanceIsVisibile,
       required this.balanceIsVisibile});
@@ -22,14 +22,16 @@ class HeadHomeComponent extends StatelessWidget {
       ),
       child: Container(
           padding: const EdgeInsets.all(12),
-          color: Colors.green,
+          color: Theme.of(context).colorScheme.inversePrimary,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
                   Text(
-                    '${(balanceIsVisibile) ? '\$' + balance.toStringAsFixed(2) : '🤑 🤑 🤑'}',
+                    (balanceIsVisibile)
+                        ? '\$${balance.toStringAsFixed(2)}'
+                        : '🤑 🤑 🤑',
                     style: Theme.of(context).textTheme.headlineSmall,
                   )
                 ],
@@ -40,8 +42,8 @@ class HeadHomeComponent extends StatelessWidget {
                   child: IconButton(
                     onPressed: onBalanceIsVisibile,
                     icon: (balanceIsVisibile)
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off),
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
                   ),
                 ),
               ]),
