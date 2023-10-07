@@ -1,10 +1,10 @@
-import 'package:fin_control/domain/DarkModeUseCase.dart';
-import 'package:fin_control/presentation/bloc/settings_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_event.dart';
-import 'package:fin_control/presentation/bloc/theme_state.dart';
+import 'package:fin_control/data/repository/settings_repository.dart';
+import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_event.dart';
+import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:flutter/material.dart';
-import 'package:fin_control/presentation/ui/settings/SettingSwitch.dart';
+import 'package:fin_control/presentation/ui/settings/setting_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,10 +15,10 @@ class SettingsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final darkModeUseCase = GetIt.instance<DarkModeUseCase>();
+    final settingsRepository = GetIt.instance<SettingsRepository>();
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsBloc(darkModeUseCase)),
+          BlocProvider(create: (context) => SettingsBloc(settingsRepository)),
         ],
         child: Container(
             color: Theme.of(context).colorScheme.background,

@@ -1,9 +1,10 @@
-import 'package:fin_control/data/dataProvider/DatabaseManager.dart';
-import 'package:fin_control/data/models/Settings.dart';
-import 'package:sqflite/sqlite_api.dart';
+import 'package:fin_control/data/dataProvider/database_manager.dart';
+import 'package:fin_control/data/models/settings.dart';
+import 'dart:developer' as developer;
 
 class SettingsDao {
   final DatabaseManager databaseManager;
+  final _columnName = 'settings';
 
   SettingsDao(this.databaseManager);
 
@@ -14,10 +15,12 @@ class SettingsDao {
       final result = await database.rawInsert(
           'INSERT INTO settings (id, isDarkMode) VALUES (?, ?)',
           [settings.id, settings.isDarkMode]);
-      print('Inserted Rows: $result');
+      developer.log('Inserted Rows: $result', time: DateTime.now());
+
       return result;
     } catch (e) {
-      print('Error inserting rows: $e');
+      developer.log('',
+          time: DateTime.now(), error: 'Error inserting settings');
       return 0;
     }
   }
@@ -27,12 +30,13 @@ class SettingsDao {
 
     try {
       final updatedRows = await database
-          .update('settings', {'isDarkMode': isDarkMode}, where: 'id = 1');
-      print('Updated Rows: $updatedRows');
+          .update(_columnName, {'isDarkMode': isDarkMode}, where: 'id = 1');
+      developer.log('Updated Rows: $updatedRows', time: DateTime.now());
 
       return updatedRows;
     } catch (e) {
-      print('Error updating rows: $e');
+      developer.log('',
+          time: DateTime.now(), error: 'Error updating dark mode setting');
       return 0;
     }
   }
@@ -48,7 +52,8 @@ class SettingsDao {
         return 0;
       }
     } catch (e) {
-      print('Error getting dark mode setting: $e');
+      developer.log('',
+          time: DateTime.now(), error: 'Error getting dark mode setting');
       return 0;
     }
   }

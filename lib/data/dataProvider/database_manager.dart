@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 abstract class DatabaseManager {
@@ -5,9 +6,7 @@ abstract class DatabaseManager {
 }
 
 class SQLiteDatabase implements DatabaseManager {
-  final String _databaseName;
-
-  SQLiteDatabase() : _databaseName = 'fincontrolapp.db';
+  SQLiteDatabase() : super();
 
   @override
   Future<Database> initializeDB() async {
@@ -21,12 +20,14 @@ class SQLiteDatabase implements DatabaseManager {
             db.execute(
               'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)',
             );
+            db.execute('''
+        CREATE TABLE IF NOT EXISTS profiles(
+          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+          name TEXT NOT NULL
+        )
+        ''');
           },
         ));
-
-    // db.execute(
-    //   'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)',
-    // );
 
     return db;
   }

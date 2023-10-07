@@ -1,4 +1,4 @@
-import 'package:fin_control/presentation/ui/settings/SettingsContent.dart';
+import 'package:fin_control/presentation/ui/settings/settings_content.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {

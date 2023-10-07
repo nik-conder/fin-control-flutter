@@ -1,10 +1,11 @@
-import 'package:fin_control/Config.dart';
-import 'package:fin_control/presentation/bloc/home_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_event.dart';
-import 'package:fin_control/presentation/bloc/theme_state.dart';
-import 'package:fin_control/presentation/ui/home/FootHomeComponent.dart';
-import 'package:fin_control/presentation/ui/home/HeadHomeComponent.dart';
+import 'package:fin_control/config.dart';
+import 'package:fin_control/domain/bloc/home/home_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_event.dart';
+import 'package:fin_control/domain/bloc/theme/theme_state.dart';
+import 'package:fin_control/presentation/ui/home/foot_home_component.dart';
+import 'package:fin_control/presentation/ui/home/head_home_component.dart';
+import 'package:fin_control/presentation/ui/profile/profile_info_block.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,6 +82,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              const Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: ProfileInfoBloc()),
               Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Container(

@@ -1,14 +1,15 @@
-import 'package:fin_control/domain/DarkModeUseCase.dart';
+import 'package:fin_control/data/repository/settings_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'dart:developer' as developer;
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  final DarkModeUseCase _darkModeUseCase;
+  final SettingsRepository _settingsRepository;
 
-  SettingsBloc(this._darkModeUseCase) : super(const SettingsState()) {
+  SettingsBloc(this._settingsRepository) : super(const SettingsState()) {
     on<SetDarkModeEvent>(_setDarkMode);
     on<GetDarkModeEvent>(_getDarkMode);
   }
@@ -19,11 +20,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   _getDarkMode(GetDarkModeEvent event, Emitter<SettingsState> emit) async {
     try {
-      int isDarkMode = await _darkModeUseCase.getDarkMode();
+      int isDarkMode = await _settingsRepository.getDarkModeSetting();
       emit(state.copyWith(isDarkMode: (isDarkMode == 1) ? true : false));
-      print("dark mode: $isDarkMode");
+      developer.log('dark mode: $isDarkMode', time: DateTime.now());
     } catch (e) {
-      print("Error: $e");
+      developer.log('', time: DateTime.now(), error: 'Error getting dark mode');
     }
   }
 }

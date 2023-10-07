@@ -1,12 +1,13 @@
-import 'package:fin_control/Config.dart';
-import 'package:fin_control/DBFactory.dart';
-import 'package:fin_control/DependencyInjector.dart';
-import 'package:fin_control/domain/DarkModeUseCase.dart';
-import 'package:fin_control/presentation/bloc/home_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_bloc.dart';
-import 'package:fin_control/presentation/bloc/theme_state.dart';
-import 'package:fin_control/presentation/ui/home/HomePage.dart';
-import 'package:fin_control/presentation/ui/settings/SettingsPage.dart';
+import 'package:fin_control/config.dart';
+import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/data/repository/profiles_repository.dart';
+import 'package:fin_control/data/repository/settings_repository.dart';
+import 'package:fin_control/domain/bloc/home/home_bloc.dart';
+import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
+import 'package:fin_control/domain/bloc/theme/theme_state.dart';
+import 'package:fin_control/presentation/ui/home/home_page.dart';
+import 'package:fin_control/presentation/ui/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -22,11 +23,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final darkModeUseCase = GetIt.instance<DarkModeUseCase>();
+    final settingsRepository = GetIt.instance<SettingsRepository>();
+    final profilesRepository = GetIt.instance<ProfilesRepository>();
+
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => ThemeBloc(darkModeUseCase)),
+          BlocProvider(create: (context) => ThemeBloc(settingsRepository)),
           BlocProvider(create: (context) => HomeBloc()),
+          BlocProvider(create: (context) => ProfileBloc(profilesRepository)),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return MaterialApp(
@@ -36,7 +40,9 @@ class MyApp extends StatelessWidget {
               brightness: state.isDarkMode ? Brightness.dark : Brightness.light,
               useMaterial3: true,
             ),
-            home: const HomePage(),
+            home: const SafeArea(
+              child: HomePage(),
+            ),
             routes: <String, WidgetBuilder>{
               '/settings': (BuildContext context) => const SettingsPage(),
             },

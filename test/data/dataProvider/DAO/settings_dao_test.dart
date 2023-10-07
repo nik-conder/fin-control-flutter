@@ -1,14 +1,13 @@
-import 'package:fin_control/DependencyInjector.dart';
-import 'package:fin_control/data/dataProvider/DAO/SettingsDAO.dart';
-import 'package:fin_control/data/models/Settings.dart';
+import 'package:fin_control/data/dataProvider/dao/settings_dao.dart';
+import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/data/models/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 
 void main() {
-  group('SettingsRepository Tests', () {
-    GetIt getIt = GetIt.instance;
+  group('SettingsDao Tests', () {
+    final getIt = GetIt.instance;
 
-    //late SettingsDaoMock settingsDaoMock;
     late SettingsDao settingsDao;
 
     setUp(() {
@@ -23,7 +22,7 @@ void main() {
       expect(insertedRows, 1);
     });
 
-    test('Update option "Dark Mode', () async {
+    test('Update option "Dark Mode"', () async {
       final updatedRows = await settingsDao.updateDarkModeSetting(1);
 
       expect(updatedRows, 1);
@@ -40,15 +39,3 @@ void main() {
     });
   });
 }
-
-// class SettingsDaoMock extends Mock implements SettingsDao {
-//   @override
-//   Future<int> updateDarkModeSetting(int isDarkMode) {
-//     return Future.value(1);
-//   }
-
-//   @override
-//   Future<int> getDarkModeSetting() {
-//     return Future.value(1);
-//   }
-// }

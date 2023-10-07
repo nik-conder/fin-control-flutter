@@ -1,9 +1,14 @@
-import 'package:fin_control/data/dataProvider/DAO/SettingsDAO.dart';
+import 'package:fin_control/data/dataProvider/dao/settings_dao.dart';
+import 'package:fin_control/data/models/settings.dart';
 
 class SettingsRepository {
   final SettingsDao settingsDao;
 
   SettingsRepository(this.settingsDao);
+
+  Future<int> insertSettings(Settings settings) async {
+    return await settingsDao.insertSettings(settings);
+  }
 
   Future<int> updateDarkModeSetting(bool isDarkMode) async {
     return await settingsDao.updateDarkModeSetting((isDarkMode) ? 1 : 0);
