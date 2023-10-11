@@ -1,60 +1,82 @@
+import 'dart:async';
 import 'dart:developer' as developer;
-
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
+import 'package:fin_control/domain/bloc/profile/profile_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-
-part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfilesRepository _profilesRepository;
 
-  ProfileBloc(this._profilesRepository)
-      : super(const ProfileState(id: 0, name: '')) {
+  final _notesController = StreamController<List<Profile>>.broadcast();
+
+  // Input stream. We add our notes to the stream using this variable.
+  StreamSink<List<Profile>> get _inNotes => _notesController.sink;
+
+  // Output stream. This one will be used within our pages to display the notes.
+  Stream<List<Profile>> get notes => _notesController.stream;
+
+  // Input stream for adding new notes. We'll call this from our pages.
+  final _addNoteController = StreamController<Profile>.broadcast();
+  StreamSink<Profile> get inAddNote => _addNoteController.sink;
+
+  ProfileBloc(this._profilesRepository) : super(ProfilesInitial()) {
+    on<TextFieldNameEvent>(
+      (event, emit) {
+        developer.log('name: ${event.name}');
+        emit(TextFieldNameState(event.name));
+      },
+    );
     on<CreateProfileEvent>(_createProfile);
-    on<LoadProfileEvent>(_loadProfile);
-    on<UpdateProfileNameEvent>(_updateProfileName);
+    on<LoadProfiles>(_loadProfiles);
+
+    _profilesRepository.getAllProfiles().listen((event) {
+      print('event: $event');
+      _inNotes.add(event);
+    });
+
+    _profilesSubscription =
+        _profilesRepository.getAllProfiles().listen((event) {
+      print('event: $event');
+      _inNotes.add(event);
+      //add(List.of(Profile(name: '', id: 0)));
+    });
   }
 
-  Stream<int> mapEventToStates(ProfileEvent event) async* {
-    if (event is LoadProfileEvent) {}
+  var controller = StreamController<List<Profile>>();
+
+  late final StreamSubscription<List<Profile>> _profilesSubscription;
+
+  _loadProfiles(LoadProfiles event, Emitter<ProfileState> emit) {
+    emit(event.users.isNotEmpty
+        ? ProfilesLoaded(event.users)
+        : ProfilesLoading());
   }
 
-  _loadProfile(LoadProfileEvent event, Emitter<ProfileState> emit) {}
+  _createProfile(CreateProfileEvent event, Emitter<ProfileState> emit) {
+    try {
+      final profile = Profile(name: event.name);
 
-  _updateProfileName(
-      UpdateProfileNameEvent event, Emitter<ProfileState> emit) {}
+      final result = _profilesRepository.insertProfile(profile);
 
-  _createProfile(CreateProfileEvent event, Emitter<ProfileState> emit) async {
-    final result =
-        await _profilesRepository.insertProfile(Profile(name: event.name));
-
-    if (result == 1) {
       developer.log('всё ок', time: DateTime.now());
       developer.log('Inserted Rows: $result', time: DateTime.now());
-
-      developer.log('click create profile ${event.name}', time: DateTime.now());
-
-      emit(state.copyWith(name: event.name));
-      developer.log('state: ${state.name}', time: DateTime.now());
-    } else {
+      emit(CreateProfileSuccess());
+      _inNotes.add(List.generate(1, (index) => profile));
+    } catch (e) {
       developer.log('',
           time: DateTime.now(), error: 'Ошибка при создании профиля');
+      emit(CreateProfileError('Error'));
     }
   }
 
-  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
-    if (event is LoadProfileEvent) {
-      // Здесь можно загрузить профиль с сервера, используя event.id
-      yield state.copyWith(id: event.id, name: 'Loaded Profile Name');
-    } else if (event is UpdateProfileNameEvent) {
-      yield state.copyWith(name: event.name);
-    }
-  }
-
-  Stream<Profile> getProfileChanges(int id) {
-    return _profilesRepository.getProfile(id);
+  @override
+  Future<void> close() {
+    _profilesSubscription.cancel();
+    _notesController.close();
+    _addNoteController.close();
+    return super.close();
   }
 }

@@ -16,25 +16,15 @@ class ProfileInfoBloc extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    'Profile id: ${state.id}',
+                    'Profile id:  ',
                   ),
                 ],
               ),
               Column(
                 children: [
                   Text(
-                    'name: ${state.name}',
+                    'name:  ',
                   )
-                ],
-              ),
-              Column(
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        BlocProvider.of<ProfileBloc>(context)
-                            .add(CreateProfileEvent(name: 'profile #1'));
-                      },
-                      child: const Text('Create profile'))
                 ],
               )
             ])));

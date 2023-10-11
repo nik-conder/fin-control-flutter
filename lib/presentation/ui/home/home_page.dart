@@ -34,15 +34,25 @@ class HomePage extends StatelessWidget {
                           : const Icon(Icons.dark_mode_outlined),
                     )),
                 Tooltip(
-                    message: 'Settings',
+                  message: 'Settings',
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
+                    icon: const Icon(Icons.settings_outlined),
+                  ),
+                ),
+                Tooltip(
+                    message: 'Log out',
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/settings');
+                        //Navigator.pushReplacementNamed(context, '/login');
+                        Navigator.popAndPushNamed(context, '/login');
                       },
-                      icon: const Icon(Icons.settings_outlined),
-                    ))
+                      icon: const Icon(Icons.logout_outlined),
+                    )),
               ],
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             );
           },
         ),

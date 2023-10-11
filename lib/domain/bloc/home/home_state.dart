@@ -16,6 +16,7 @@ final class HomeState extends Equatable {
   HomeState copyWith({
     double? toolBarOpacity,
     bool? isValid,
+    bool? isLogin,
     double? balance,
     bool? balanceIsVisibile,
   }) {

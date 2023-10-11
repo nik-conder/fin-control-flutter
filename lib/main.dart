@@ -7,6 +7,7 @@ import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/presentation/ui/home/home_page.dart';
+import 'package:fin_control/presentation/ui/login/login_page.dart';
 import 'package:fin_control/presentation/ui/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,11 +41,15 @@ class MyApp extends StatelessWidget {
               brightness: state.isDarkMode ? Brightness.dark : Brightness.light,
               useMaterial3: true,
             ),
-            home: const SafeArea(
-              child: HomePage(),
-            ),
+            home: BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+              //return (state.isLogin) ? const HomePage() : const LoginPage();
+              return LoginPage();
+            }),
             routes: <String, WidgetBuilder>{
+              '/home': (BuildContext context) => const HomePage(),
               '/settings': (BuildContext context) => const SettingsPage(),
+              '/login': (BuildContext context) => const LoginPage(),
             },
           );
         }));

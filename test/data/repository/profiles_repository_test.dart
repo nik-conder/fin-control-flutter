@@ -1,12 +1,15 @@
 import 'package:fin_control/dependency_injector.dart';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 
 void main() {
   group('ProfilesRepository Tests', () {
     GetIt getIt = GetIt.instance;
+
+    const String profileName = 'Test prfile #1';
 
     late ProfilesRepository profilesRepository;
 
@@ -16,7 +19,7 @@ void main() {
     });
 
     test('Insert Profile', () async {
-      final profile = Profile(id: 1, name: 'Test prfile #1');
+      final profile = Profile(id: 1, name: profileName);
 
       final insertedRows = await profilesRepository.insertProfile(profile);
 
@@ -32,9 +35,22 @@ void main() {
     test('Get profile by id', () async {
       final result = profilesRepository.getProfile(1);
 
+      result.then((value) => {
+            expect(value, isNotNull),
+            expect(value.name, profileName),
+            debugPrint('Profile: ${value.name}'),
+          });
+    });
+
+    test('Get all profiles', () {
+      final result = profilesRepository.getAllProfiles();
+
       result.listen((event) {
-        expect(event.name, 'Test prfile #1');
-        expect(event.id, 1);
+        expect(event, isNotNull);
+        expect(event.length, 1);
+        expect(event[0].name, profileName);
+        expect(event[0].id, 1);
+        debugPrint('Profile: ${event[0].name}');
       });
     });
 

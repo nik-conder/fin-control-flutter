@@ -1,18 +1,27 @@
-part of 'profile_bloc.dart';
+import 'package:fin_control/data/models/profile.dart';
 
 abstract class ProfileEvent {}
 
-class LoadProfileEvent extends ProfileEvent {
-  final int id;
-  LoadProfileEvent(this.id);
+class LoadProfiles extends ProfileEvent {
+  LoadProfiles(this.users);
+
+  final List<Profile> users;
 }
 
-class UpdateProfileNameEvent extends ProfileEvent {
+class TextFieldNameEvent extends ProfileEvent {
   final String name;
-  UpdateProfileNameEvent(this.name);
+
+  TextFieldNameEvent(this.name);
+
+  @override
+  List<Object?> get props => [name];
 }
 
 class CreateProfileEvent extends ProfileEvent {
   final String name;
-  CreateProfileEvent({required this.name});
+
+  CreateProfileEvent(this.name);
+
+  @override
+  List<Object?> get props => [name];
 }
