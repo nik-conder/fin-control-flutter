@@ -4,6 +4,7 @@ import 'package:fin_control/data/dataProvider/database_manager.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
 import 'package:fin_control/data/repository/settings_repository.dart';
 import 'package:fin_control/domain/bloc/home/home_bloc.dart';
+import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
@@ -32,10 +33,11 @@ class DependencyInjector {
 
     getIt.registerFactory<HomeBloc>(() => HomeBloc());
 
-    getIt.registerFactory<ProfileBloc>(
-        () => ProfileBloc(getIt<ProfilesRepository>()));
+    getIt.registerFactory<ProfileBloc>(() => ProfileBloc());
 
     getIt.registerFactory<SettingsBloc>(
         () => SettingsBloc(getIt<SettingsRepository>()));
+
+    getIt.registerFactory<ProfileListBloc>(() => ProfileListBloc());
   }
 }

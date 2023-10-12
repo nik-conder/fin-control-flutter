@@ -1,16 +1,19 @@
 class Profile {
   int? id;
   final String name;
+  double balance = 0;
 
   Profile({
     this.id,
     required this.name,
+    this.balance = 0,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
+      'balance': balance,
     };
   }
 
@@ -18,6 +21,7 @@ class Profile {
     return Profile(
       id: map['id'],
       name: map['name'],
+      balance: map['balance'],
     );
   }
 }

@@ -13,14 +13,7 @@ class LoginContent extends StatelessWidget {
         children: [
           CreateProfileContent(),
           const Text("или выберите другой"),
-          Container(
-            padding: const EdgeInsets.all(12),
-            color: Theme.of(context).colorScheme.inversePrimary,
-            child: Column(children: [
-              Text("List #1", style: Theme.of(context).textTheme.headlineSmall),
-              ProfilesListOne(),
-            ]),
-          ),
+          ProfilesList(),
         ],
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:fin_control/data/dataProvider/dao/profiles_dao.dart';
 import 'package:fin_control/data/models/profile.dart';
-import 'dart:developer' as developer;
 
 class ProfilesRepository {
   final ProfilesDAO profilesDao;
@@ -21,5 +20,13 @@ class ProfilesRepository {
 
   Stream<List<Profile>> getAllProfiles() async* {
     yield* profilesDao.getAllProfiles();
+  }
+
+  Stream<double> getBalance(int id) async* {
+    yield* profilesDao.getBalance(id);
+  }
+
+  Future<num> updateBalance(int id, double balance) async {
+    return profilesDao.updateBalance(id, balance);
   }
 }

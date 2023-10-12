@@ -12,7 +12,8 @@ class CreateProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileLimits = ProfileLimits();
+    TextEditingController _controller = TextEditingController();
+
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is CreateProfileSuccess) {
@@ -52,20 +53,30 @@ class CreateProfileContent extends StatelessWidget {
               Text("Создайте новый профиль",
                   style: Theme.of(context).textTheme.headlineSmall),
               TextField(
-                decoration: const InputDecoration(
+                controller: _controller,
+                decoration: InputDecoration(
                     labelText: 'Название профиля',
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _controller.clear();
+                        }),
                     helperText:
                         'Осталось ${ProfileLimits.profileNameLimitChar} символ(а|ов)'),
-                onChanged: (value) =>
-                    profileBloc.add(TextFieldNameEvent(value)),
               ),
               OutlinedButton(
                   onPressed: () => {
-                        profileBloc.add(CreateProfileEvent("New profile")),
+                        profileBloc.add(CreateProfileEvent(_controller.text)),
+                        //Navigator.pushReplacementNamed(context, '/home')
+                      },
+                  child: const Text("Создать")),
+              OutlinedButton(
+                  onPressed: () => {
+                        //profileBloc.add(CreateProfileEvent("New profile")),
                         Navigator.pushReplacementNamed(context, '/home')
                       },
-                  child: const Text("Создать"))
+                  child: const Text("Далее"))
             ],
           ),
         );

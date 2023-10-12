@@ -24,14 +24,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settingsRepository = GetIt.instance<SettingsRepository>();
-    final profilesRepository = GetIt.instance<ProfilesRepository>();
+    final themeBloc = GetIt.instance<ThemeBloc>();
+    final homeBloc = GetIt.instance<HomeBloc>();
 
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => ThemeBloc(settingsRepository)),
-          BlocProvider(create: (context) => HomeBloc()),
-          BlocProvider(create: (context) => ProfileBloc(profilesRepository)),
+          BlocProvider(create: (context) => themeBloc),
+          BlocProvider(create: (context) => homeBloc),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return MaterialApp(
@@ -41,15 +40,11 @@ class MyApp extends StatelessWidget {
               brightness: state.isDarkMode ? Brightness.dark : Brightness.light,
               useMaterial3: true,
             ),
-            home: BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, state) {
-              //return (state.isLogin) ? const HomePage() : const LoginPage();
-              return LoginPage();
-            }),
+            home: LoginPage(),
             routes: <String, WidgetBuilder>{
               '/home': (BuildContext context) => const HomePage(),
               '/settings': (BuildContext context) => const SettingsPage(),
-              '/login': (BuildContext context) => const LoginPage(),
+              '/login': (BuildContext context) => LoginPage(),
             },
           );
         }));

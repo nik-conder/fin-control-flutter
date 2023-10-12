@@ -1,29 +1,25 @@
 import 'dart:math';
-
+import 'dart:developer' as developer;
+import 'package:fin_control/data/repository/profiles_repository.dart';
+import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  final _profileRepository = GetIt.instance<ProfilesRepository>();
+
   HomeBloc() : super(const HomeState()) {
     on<OpacitySetEvent>(_setOpacity);
-    on<UpdateBalance>(_setBalance);
     on<BalanceVisible>(_setBalanceVisible);
   }
 
   _setOpacity(OpacitySetEvent event, Emitter<HomeState> emit) {
     emit(state.copyWith(
       toolBarOpacity: event.toolBarOpacity,
-    ));
-  }
-
-  _setBalance(UpdateBalance event, Emitter<HomeState> emit) {
-    final random = Random();
-    double balance = event.balance + 100 + random.nextDouble() * (1000 - 100);
-    emit(state.copyWith(
-      balance: balance,
     ));
   }
 

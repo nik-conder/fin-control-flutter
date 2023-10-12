@@ -1,58 +1,64 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:math';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
 import 'package:fin_control/domain/bloc/profile/profile_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final ProfilesRepository _profilesRepository;
+  late Timer timer;
 
-  final _notesController = StreamController<List<Profile>>.broadcast();
+  final ProfilesRepository _profilesRepository =
+      GetIt.instance<ProfilesRepository>();
 
-  // Input stream. We add our notes to the stream using this variable.
-  StreamSink<List<Profile>> get _inNotes => _notesController.sink;
+  Stream<double> get getBalanceStream async* {
+    yield* _profilesRepository.getBalance(1); // todo
+  }
 
-  // Output stream. This one will be used within our pages to display the notes.
-  Stream<List<Profile>> get notes => _notesController.stream;
+  final StreamController<double> _controller = StreamController<double>();
 
-  // Input stream for adding new notes. We'll call this from our pages.
-  final _addNoteController = StreamController<Profile>.broadcast();
-  StreamSink<Profile> get inAddNote => _addNoteController.sink;
+  Stream<double> get balanceStream => _controller.stream;
 
-  ProfileBloc(this._profilesRepository) : super(ProfilesInitial()) {
-    on<TextFieldNameEvent>(
-      (event, emit) {
-        developer.log('name: ${event.name}');
-        emit(TextFieldNameState(event.name));
+  ProfileBloc() : super(ProfileInitial()) {
+    on<CreateProfileEvent>(_createProfile);
+    on<GetBalanceEvent>((event, emit) async {});
+    on<UpdateBalance>(
+      (event, emit) async {
+        try {
+          await _profilesRepository.updateBalance(event.id, event.balance);
+          final getBalance = await _profilesRepository.getBalance(1);
+          getBalance.listen((event) {
+            _controller.add(event);
+          });
+        } catch (e) {
+          developer.log('', time: DateTime.now(), error: e.toString());
+        }
       },
     );
-    on<CreateProfileEvent>(_createProfile);
-    on<LoadProfiles>(_loadProfiles);
-
-    _profilesRepository.getAllProfiles().listen((event) {
-      print('event: $event');
-      _inNotes.add(event);
+    getBalanceStream.listen((event) async {
+      await Future<void>.delayed(const Duration(seconds: 2));
+      _controller.add(event);
     });
 
-    _profilesSubscription =
-        _profilesRepository.getAllProfiles().listen((event) {
-      print('event: $event');
-      _inNotes.add(event);
-      //add(List.of(Profile(name: '', id: 0)));
+    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) async {
+      final profiles = _profilesRepository.getBalance(1);
+      profiles.listen((list) {
+        _controller.add(list);
+      });
     });
   }
 
-  var controller = StreamController<List<Profile>>();
-
-  late final StreamSubscription<List<Profile>> _profilesSubscription;
-
-  _loadProfiles(LoadProfiles event, Emitter<ProfileState> emit) {
-    emit(event.users.isNotEmpty
-        ? ProfilesLoaded(event.users)
-        : ProfilesLoading());
+  _getProfile() async {
+    try {
+      final profile = await _profilesRepository.getProfile(1);
+      emit(ProfileLoadSuccess(profile));
+    } catch (e) {
+      emit(ProfileError('Error'));
+    }
   }
 
   _createProfile(CreateProfileEvent event, Emitter<ProfileState> emit) {
@@ -64,7 +70,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       developer.log('всё ок', time: DateTime.now());
       developer.log('Inserted Rows: $result', time: DateTime.now());
       emit(CreateProfileSuccess());
-      _inNotes.add(List.generate(1, (index) => profile));
     } catch (e) {
       developer.log('',
           time: DateTime.now(), error: 'Ошибка при создании профиля');
@@ -74,9 +79,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   @override
   Future<void> close() {
-    _profilesSubscription.cancel();
-    _notesController.close();
-    _addNoteController.close();
+    timer.cancel();
     return super.close();
   }
 }

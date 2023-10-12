@@ -10,6 +10,7 @@ void main() {
     GetIt getIt = GetIt.instance;
 
     const String profileName = 'Test prfile #1';
+    const double profileBalance = 123456.789;
 
     late ProfilesRepository profilesRepository;
 
@@ -19,7 +20,8 @@ void main() {
     });
 
     test('Insert Profile', () async {
-      final profile = Profile(id: 1, name: profileName);
+      final profile =
+          Profile(id: 1, name: profileName, balance: profileBalance);
 
       final insertedRows = await profilesRepository.insertProfile(profile);
 
@@ -51,6 +53,32 @@ void main() {
         expect(event[0].name, profileName);
         expect(event[0].id, 1);
         debugPrint('Profile: ${event[0].name}');
+      });
+    });
+
+    group('Balance', () {
+      test('Get profile balance', () async {
+        final result = await profilesRepository.getBalance(1);
+
+        debugPrint('Balance: $result');
+
+        result.listen((event) {
+          expect(event, profileBalance);
+        });
+      });
+
+      test('Update balance: + 100500', () async {
+        final result = await profilesRepository.updateBalance(1, 100500);
+
+        expect(1, result);
+
+        final getBalance = await profilesRepository.getBalance(1);
+
+        const resultBalance = 100500;
+
+        getBalance.listen((event) {
+          expect(event, resultBalance);
+        });
       });
     });
 

@@ -8,15 +8,6 @@ class LoadProfiles extends ProfileEvent {
   final List<Profile> users;
 }
 
-class TextFieldNameEvent extends ProfileEvent {
-  final String name;
-
-  TextFieldNameEvent(this.name);
-
-  @override
-  List<Object?> get props => [name];
-}
-
 class CreateProfileEvent extends ProfileEvent {
   final String name;
 
@@ -24,4 +15,20 @@ class CreateProfileEvent extends ProfileEvent {
 
   @override
   List<Object?> get props => [name];
+}
+
+class GetBalanceEvent extends ProfileEvent {
+  GetBalanceEvent(this.id);
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class UpdateBalance extends ProfileEvent {
+  final int id;
+  final double balance;
+
+  UpdateBalance(this.id, this.balance);
 }

@@ -7,26 +7,21 @@ abstract class ProfileState extends Equatable {
   List<Object?> get props => [];
 }
 
-class ProfilesInitial extends ProfileState {}
+class ProfileInitial extends ProfileState {}
 
-class ProfilesLoading extends ProfileState {}
+class ProfileLoadSuccess extends ProfileState {
+  final Profile profile;
 
-class ProfilesLoaded extends ProfileState {
-  final List<Profile> users;
-
-  const ProfilesLoaded(this.users);
-
-  @override
-  List<Object?> get props => [users];
+  const ProfileLoadSuccess(this.profile);
 }
 
-class ProfilesTracking extends ProfileState {
-  final List<Profile> users;
+class GetBalanceSuccess extends ProfileState {
+  final double balance;
 
-  const ProfilesTracking(this.users);
+  const GetBalanceSuccess(this.balance);
 
   @override
-  List<Object?> get props => [users];
+  List<Object?> get props => [balance];
 }
 
 class ProfileError extends ProfileState {
@@ -38,18 +33,12 @@ class ProfileError extends ProfileState {
   List<Object?> get props => [message];
 }
 
-class TextFieldNameState extends ProfileState {
-  final String name;
-
-  TextFieldNameState(this.name);
-}
-
 class CreateProfileSuccess extends ProfileState {}
 
 class CreateProfileError extends ProfileState {
   final String message;
 
-  CreateProfileError(this.message);
+  const CreateProfileError(this.message);
 
   @override
   List<Object?> get props => [message];
