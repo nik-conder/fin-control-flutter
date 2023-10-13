@@ -92,6 +92,23 @@ class ProfilesDAO {
   }
 
   Stream<List<Profile>> getAllProfiles() async* {
+    try {
+      final database = await databaseManager.initializeDB();
+      final result = await database.query(_columnName);
+      final profiles = List.generate(result.length, (i) {
+        return Profile.fromMap(result[i]);
+      });
+      yield* Stream.value(profiles);
+    } catch (e) {
+      developer.log('Error getting all profiles: $e', time: DateTime.now());
+      yield* Stream.error(e);
+    }
+  }
+}
+
+/*
+
+ print("ebal");
     final db = await databaseManager.initializeDB();
 
     final List<Map<String, dynamic>> maps = await db.query('profiles');
@@ -107,5 +124,5 @@ class ProfilesDAO {
     yield* Stream.value(profiles);
 
     yield* const Stream.empty();
-  }
-}
+
+    */

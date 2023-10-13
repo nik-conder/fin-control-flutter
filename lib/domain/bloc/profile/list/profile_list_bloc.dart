@@ -6,39 +6,40 @@ import 'package:fin_control/domain/bloc/profile/list/profile_list_event.dart';
 import 'package:fin_control/domain/bloc/profile/list/profile_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ProfileListBloc extends Bloc<ProfileListEvent, ProfileListState> {
-  late Timer timer;
   final ProfilesRepository _profilesRepository =
       GetIt.instance<ProfilesRepository>();
 
-  Stream<List<Profile>> get usersList async* {
-    yield* _profilesRepository.getAllProfiles();
+  final BehaviorSubject<List<Profile>> _profileListSubject =
+      BehaviorSubject<List<Profile>>();
+
+  Stream<List<Profile>> get profileListStream => _profileListSubject.stream;
+
+  ProfileListBloc() : super(ProfileListLoading()) {
+    on<SelectProfile>(_selectProfile);
+    on<Login>((event, emit) {
+      print(event.profile.toMap());
+    });
+
+    _profilesRepository
+        .getAllProfiles()
+        .throttleTime(const Duration(seconds: 2))
+        .listen((event) {
+      print("emit all profiles: ${event.length}");
+      _profileListSubject.add(event);
+    });
   }
 
-  final StreamController<List<Profile>> _controller =
-      StreamController<List<Profile>>();
-
-  Stream<List<Profile>> get profileListStream => _controller.stream;
-
-  ProfileListBloc() : super(ProfileListState()) {
-    usersList.listen((list) async {
-      await Future<void>.delayed(const Duration(seconds: 2));
-      _controller.add(list);
-    });
-
-    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) async {
-      final profiles = _profilesRepository.getAllProfiles();
-      profiles.listen((list) {
-        _controller.add(list);
-      });
-    });
+  _selectProfile(SelectProfile event, Emitter<ProfileListState> emit) async {
+    print('clicked ${event.profile.name}');
+    emit(ProfileSelected(profile: event.profile));
   }
 
   @override
   Future<void> close() {
-    timer.cancel();
-    _controller.close();
+    _profileListSubject.close();
     return super.close();
   }
 }

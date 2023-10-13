@@ -15,11 +15,11 @@ void main() {
       settingsRepository = getIt<SettingsRepository>();
     });
 
-    test('Insert Setting', () async {
-      final settings = Settings(id: 1, isDarkMode: 1);
-      final insertedRows = await settingsRepository.insertSettings(settings);
+    test('Check Auto Insert Setting', () async {
+      final insertedRows = await settingsRepository.getSettings();
 
-      expect(insertedRows, 1);
+      expect(insertedRows.id, 1);
+      expect(insertedRows.isDarkMode, 1);
     });
 
     test('Update option "Dark Mode', () async {
@@ -30,8 +30,9 @@ void main() {
 
     test('Get option "Dark Mode', () async {
       final darkModeSetting = await settingsRepository.getDarkModeSetting();
-
-      expect(darkModeSetting, 1);
+      darkModeSetting.listen((event) {
+        expect(event, true);
+      });
     });
 
     tearDown(() {

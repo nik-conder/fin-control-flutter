@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fin_control/presentation/ui/settings/setting_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsContent extends StatelessWidget {
   const SettingsContent({super.key});
@@ -27,9 +28,7 @@ class SettingsContent extends StatelessWidget {
                 BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
                   return SettingSwitch(
                     state: state.isDarkMode,
-                    title: 'Dark mode',
-                    description:
-                        'какое то большое описание данной настройки на сколько то там символов крч ты понял нет',
+                    title: AppLocalizations.of(context)!.dark_mode,
                     onClick: (newValue) => {
                       BlocProvider.of<ThemeBloc>(context)
                           .add(UpdateThemeEvent()),

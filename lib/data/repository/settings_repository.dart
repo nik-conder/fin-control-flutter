@@ -10,12 +10,16 @@ class SettingsRepository {
     return await settingsDao.insertSettings(settings);
   }
 
+  Future<Settings> getSettings() async {
+    return await settingsDao.getSettings();
+  }
+
   Future<int> updateDarkModeSetting(bool isDarkMode) async {
     return await settingsDao.updateDarkModeSetting((isDarkMode) ? 1 : 0);
   }
 
-  Future<int> getDarkModeSetting() async {
+  Stream<bool> getDarkModeSetting() async* {
     final result = await settingsDao.getDarkModeSetting();
-    return result;
+    yield* result;
   }
 }

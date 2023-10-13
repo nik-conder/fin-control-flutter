@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 abstract class DatabaseManager {
@@ -9,6 +10,8 @@ abstract class DatabaseManager {
 class SQLiteDatabase implements DatabaseManager {
   late DatabaseFactory databaseFactory;
   late Database db;
+
+  late String dbPath;
 
   final int version = 1;
 
@@ -26,15 +29,31 @@ class SQLiteDatabase implements DatabaseManager {
   Future<Database> initializeDB() async {
     sqfliteFfiInit();
 
-    db = await databaseFactory.openDatabase(inMemoryDatabasePath,
-        options: OpenDatabaseOptions(
-          version: 1,
-          onCreate: (db, version) {
-            db.execute(_tableSettings);
-            db.execute(_tableProfiles);
-          },
-        ));
+// Проверяем текущий режим работы приложения
+    if (kDebugMode) {
+      // Режим отладки: используем inMemoryDatabasePath
+      db = await databaseFactory.openDatabase(inMemoryDatabasePath,
+          options: OpenDatabaseOptions(
+            version: 1,
+            onCreate: (db, version) {
+              db.execute(_tableSettings);
+              db.execute(_tableProfiles);
+            },
+          ));
+    } else {
+      // Режим тестирования: используем временный путь к базе данных
+      final dbPath = await databaseFactory.getDatabasesPath();
+      db = await databaseFactory.openDatabase('$dbPath/my_database.db',
+          options: OpenDatabaseOptions(
+            version: 1,
+            onCreate: (db, version) {
+              db.execute(_tableSettings);
+              db.execute(_tableProfiles);
+            },
+          ));
+    }
 
+    db.rawInsert("INSERT INTO settings (isDarkMode) VALUES (?)", [1]);
     return db;
   }
 

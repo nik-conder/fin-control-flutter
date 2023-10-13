@@ -26,6 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileInitial()) {
     on<CreateProfileEvent>(_createProfile);
     on<GetBalanceEvent>((event, emit) async {});
+
     on<UpdateBalance>(
       (event, emit) async {
         try {

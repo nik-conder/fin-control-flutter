@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class FootHomeComponent extends StatelessWidget {
-  const FootHomeComponent({Key? key}) : super(key: key);
+class FootComponent extends StatelessWidget {
+  const FootComponent({Key? key}) : super(key: key);
 
   String getPlathorm() {
     if (Platform.isAndroid) {
@@ -23,6 +23,13 @@ class FootHomeComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [Text('Plathorm: ${getPlathorm()}')]);
+    return Container(
+        padding: const EdgeInsets.all(24),
+        color: Theme.of(context).colorScheme.inversePrimary,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            'Created by ${getPlathorm()}',
+          )
+        ]));
   }
 }

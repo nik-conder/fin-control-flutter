@@ -10,17 +10,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsRepository _settingsRepository;
 
   SettingsBloc(this._settingsRepository) : super(const SettingsState()) {
-    on<SetDarkModeEvent>(_setDarkMode);
     on<GetDarkModeEvent>(_getDarkMode);
-  }
-
-  _setDarkMode(SetDarkModeEvent event, Emitter<SettingsState> emit) {
-    emit(state.copyWith(isDarkMode: (event.isDarkMode ? true : false)));
   }
 
   _getDarkMode(GetDarkModeEvent event, Emitter<SettingsState> emit) async {
     try {
-      int isDarkMode = await _settingsRepository.getDarkModeSetting();
+      //bool isDarkMode = await _settingsRepository.getDarkModeSetting();
+      bool isDarkMode = false;
+
       emit(state.copyWith(isDarkMode: (isDarkMode == 1) ? true : false));
       developer.log('dark mode: $isDarkMode', time: DateTime.now());
     } catch (e) {

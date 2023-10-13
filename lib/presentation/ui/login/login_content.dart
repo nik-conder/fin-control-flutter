@@ -12,7 +12,8 @@ class LoginContent extends StatelessWidget {
       child: Column(
         children: [
           CreateProfileContent(),
-          const Text("или выберите другой"),
+          Text("или выберите из списка",
+              style: Theme.of(context).textTheme.bodyLarge),
           ProfilesList(),
         ],
       ),
