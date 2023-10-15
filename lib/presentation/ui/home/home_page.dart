@@ -1,4 +1,5 @@
 import 'package:fin_control/config.dart';
+import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/domain/bloc/home/home_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
@@ -9,12 +10,21 @@ import 'package:fin_control/presentation/ui/home/home_content.dart';
 import 'package:fin_control/presentation/ui/home/home_head.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    // Извлечение профиля из аргументов
+    final Profile profile = args['profile'];
+
+    final localization = AppLocalizations.of(context)!;
+
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return Scaffold(
@@ -22,7 +32,9 @@ class HomePage extends StatelessWidget {
             title: const Text(GeneralConfig.appName),
             actions: [
               Tooltip(
-                  message: (state.isDarkMode) ? 'Light mode' : 'Dark mode',
+                  message: (state.isDarkMode)
+                      ? localization.light_mode
+                      : localization.dark_mode,
                   child: IconButton(
                     onPressed: () {
                       BlocProvider.of<ThemeBloc>(context)
@@ -33,7 +45,7 @@ class HomePage extends StatelessWidget {
                         : const Icon(Icons.dark_mode_outlined),
                   )),
               Tooltip(
-                message: 'Settings',
+                message: localization.title_settings,
                 child: IconButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/settings');
@@ -42,7 +54,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Tooltip(
-                  message: 'Log out',
+                  message: localization.title_logout,
                   child: IconButton(
                     onPressed: () {
                       //Navigator.pushReplacementNamed(context, '/login');
@@ -53,22 +65,12 @@ class HomePage extends StatelessWidget {
             ],
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           ),
-          body: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => HomeBloc(),
-              ),
-              BlocProvider(
-                create: (context) => ProfileBloc(),
-              )
+          body: Column(
+            children: [
+              HomeHead(profile: profile),
+              const HomeContent(),
+              const FootComponent()
             ],
-            child: Column(
-              children: [
-                HomeHead(),
-                const HomeContent(),
-                const FootComponent()
-              ],
-            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},

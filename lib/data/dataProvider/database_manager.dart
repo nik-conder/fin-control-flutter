@@ -21,6 +21,9 @@ class SQLiteDatabase implements DatabaseManager {
   final String _tableProfiles =
       'CREATE TABLE IF NOT EXISTS profiles(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, balance REAL DEFAULT 0)';
 
+  final String _tableSessions =
+      'CREATE TABLE IF NOT EXISTS sessions(id INTEGER PRIMARY KEY AUTOINCREMENT, profileId INTEGER NOT NULL)';
+
   SQLiteDatabase() : super() {
     databaseFactory = databaseFactoryFfi;
   }
@@ -38,6 +41,7 @@ class SQLiteDatabase implements DatabaseManager {
             onCreate: (db, version) {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
+              db.execute(_tableSessions);
             },
           ));
     } else {
@@ -49,11 +53,12 @@ class SQLiteDatabase implements DatabaseManager {
             onCreate: (db, version) {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
+              db.execute(_tableSessions);
             },
           ));
     }
 
-    db.rawInsert("INSERT INTO settings (isDarkMode) VALUES (?)", [1]);
+    db.rawInsert("INSERT INTO settings (isDarkMode) VALUES (?)", [0]);
     return db;
   }
 

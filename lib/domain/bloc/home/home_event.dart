@@ -7,7 +7,7 @@ class OpacitySetEvent extends HomeEvent {
   OpacitySetEvent(this.toolBarOpacity);
 }
 
-class BalanceVisible extends HomeEvent {
+class BalanceVisibleEvent extends HomeEvent {
   final bool balanceIsVisibile;
-  BalanceVisible(this.balanceIsVisibile);
+  BalanceVisibleEvent(this.balanceIsVisibile);
 }

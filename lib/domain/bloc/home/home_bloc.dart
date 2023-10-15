@@ -14,7 +14,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc() : super(const HomeState()) {
     on<OpacitySetEvent>(_setOpacity);
-    on<BalanceVisible>(_setBalanceVisible);
+    on<BalanceVisibleEvent>(_setBalanceVisible);
   }
 
   _setOpacity(OpacitySetEvent event, Emitter<HomeState> emit) {
@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ));
   }
 
-  _setBalanceVisible(BalanceVisible event, Emitter<HomeState> emit) {
+  _setBalanceVisible(BalanceVisibleEvent event, Emitter<HomeState> emit) {
     emit(state.copyWith(
       balanceIsVisibile: event.balanceIsVisibile,
     ));

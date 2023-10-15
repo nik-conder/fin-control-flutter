@@ -7,39 +7,30 @@ import 'package:fin_control/domain/bloc/profile/list/profile_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:stream_bloc/stream_bloc.dart';
 
 class ProfileListBloc extends Bloc<ProfileListEvent, ProfileListState> {
   final ProfilesRepository _profilesRepository =
       GetIt.instance<ProfilesRepository>();
 
-  final BehaviorSubject<List<Profile>> _profileListSubject =
+  final BehaviorSubject<List<Profile>> _profilesSubject =
       BehaviorSubject<List<Profile>>();
 
-  Stream<List<Profile>> get profileListStream => _profileListSubject.stream;
+  Stream<List<Profile>> get profilesStream => _profilesSubject.stream;
 
-  ProfileListBloc() : super(ProfileListLoading()) {
-    on<SelectProfile>(_selectProfile);
-    on<Login>((event, emit) {
-      print(event.profile.toMap());
-    });
-
-    _profilesRepository
-        .getAllProfiles()
-        .throttleTime(const Duration(seconds: 2))
-        .listen((event) {
-      print("emit all profiles: ${event.length}");
-      _profileListSubject.add(event);
-    });
+  ProfileListBloc() : super(const ProfileListState(profiles: [])) {
+    on<UpdateProfilesListEvent>(_updateProfilesList);
   }
 
-  _selectProfile(SelectProfile event, Emitter<ProfileListState> emit) async {
-    print('clicked ${event.profile.name}');
-    emit(ProfileSelected(profile: event.profile));
+  void _updateProfilesList(
+      UpdateProfilesListEvent event, Emitter<ProfileListState> emit) {
+    _profilesRepository.getAllProfiles().listen((profile) {
+      _profilesSubject.add(profile);
+    });
   }
 
   @override
-  Future<void> close() {
-    _profileListSubject.close();
-    return super.close();
+  void dispose() {
+    _profilesSubject.close();
   }
 }

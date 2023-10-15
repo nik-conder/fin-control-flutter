@@ -1,6 +1,9 @@
 import 'package:fin_control/config.dart';
 import 'package:fin_control/dependency_injector.dart';
 import 'package:fin_control/domain/bloc/home/home_bloc.dart';
+import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
+import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
+import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/presentation/ui/home/home_page.dart';
@@ -25,11 +28,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeBloc = GetIt.instance<ThemeBloc>();
     final homeBloc = GetIt.instance<HomeBloc>();
+    final sessionBloc = GetIt.instance<SessionBloc>();
+    final profilesListBloc = GetIt.instance<ProfileListBloc>();
+    final profileBloc = GetIt.instance<ProfileBloc>();
 
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => themeBloc),
           BlocProvider(create: (context) => homeBloc),
+          BlocProvider(create: (context) => sessionBloc),
+          BlocProvider(create: (context) => profilesListBloc),
+          BlocProvider(create: (context) => profileBloc),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return MaterialApp(

@@ -10,9 +10,8 @@ class ProfilesDAO {
   ProfilesDAO(this.databaseManager);
 
   Future<int> insertProfile(Profile profile) async {
-    final database = await databaseManager.initializeDB();
-
     try {
+      final database = await databaseManager.initializeDB();
       return await database.rawInsert(
           'INSERT INTO profiles (id, name, balance) VALUES (?, ?, ?)',
           [profile.id, profile.name, profile.balance]);
@@ -23,9 +22,8 @@ class ProfilesDAO {
   }
 
   Future<String> getName(int id) async {
-    final database = await databaseManager.initializeDB();
-
     try {
+      final database = await databaseManager.initializeDB();
       final result = await database.query(_columnName,
           columns: ['name'], where: 'id = ?', whereArgs: [id]);
       return result.first['name'].toString();
@@ -36,31 +34,34 @@ class ProfilesDAO {
   }
 
   Stream<double> getBalance(int id) async* {
-    final database = await databaseManager.initializeDB();
+    while (true) {
+      try {
+        final database = await databaseManager.initializeDB();
+        final result = await database.query(
+          _columnName,
+          columns: ['balance'],
+          where: 'id = ?',
+          whereArgs: [id],
+        );
 
-    try {
-      final result = await database.query(
-        _columnName,
-        columns: ['balance'],
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-
-      if (result.isNotEmpty) {
-        final balance = result.first['balance'] as double;
-        yield balance;
-      } else {
+        if (result.isNotEmpty) {
+          final balance = result.first['balance'] as double;
+          yield balance;
+        } else {
+          yield 0;
+        }
+      } catch (e) {
+        developer.log('Error getting balance: $e', time: DateTime.now());
         yield 0;
       }
-    } catch (e) {
-      developer.log('Error getting balance: $e', time: DateTime.now());
-      yield 0;
+      await Future.delayed(Duration(
+          seconds: 5)); // Опрашивать базу каждые 5 секунд (или другой интервал)
     }
   }
 
   Future<Profile> getProfile(int id) async {
-    final database = await databaseManager.initializeDB();
     try {
+      final database = await databaseManager.initializeDB();
       final result =
           await database.query(_columnName, where: 'id = ?', whereArgs: [id]);
       if (result.isNotEmpty) {
@@ -74,17 +75,14 @@ class ProfilesDAO {
     }
   }
 
-  Future<num> updateBalance(int id, double balance) async {
-    final database = await databaseManager.initializeDB();
-    final getBalance = this.getBalance(id);
-
+  Future<double> updateBalance(int id, double balance) async {
     try {
+      final database = await databaseManager.initializeDB();
       final res = await database.rawUpdate(
         'UPDATE profiles SET balance = ? WHERE id = ?',
         [balance, id],
       );
-      print('res: $res');
-      return res;
+      return res.toDouble();
     } catch (e) {
       developer.log('Error updating balance: $e', time: DateTime.now());
       return 0;
@@ -102,27 +100,6 @@ class ProfilesDAO {
     } catch (e) {
       developer.log('Error getting all profiles: $e', time: DateTime.now());
       yield* Stream.error(e);
-    }
+    } // Опрашивать базу каждые 5 секунд (или другой интервал)
   }
 }
-
-/*
-
- print("ebal");
-    final db = await databaseManager.initializeDB();
-
-    final List<Map<String, dynamic>> maps = await db.query('profiles');
-
-    final profiles = List.generate(maps.length, (i) {
-      return Profile(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        // ...
-      );
-    });
-
-    yield* Stream.value(profiles);
-
-    yield* const Stream.empty();
-
-    */

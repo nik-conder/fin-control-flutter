@@ -15,6 +15,16 @@ class ProfileLoadSuccess extends ProfileState {
   const ProfileLoadSuccess(this.profile);
 }
 
+@immutable
+class ProfileLoaded extends ProfileState {
+  final Profile profile;
+
+  const ProfileLoaded(this.profile);
+
+  @override
+  List<Object?> get props => [profile];
+}
+
 class GetBalanceSuccess extends ProfileState {
   final double balance;
 

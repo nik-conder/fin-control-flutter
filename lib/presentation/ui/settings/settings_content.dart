@@ -16,6 +16,8 @@ class SettingsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     final settingsRepository = GetIt.instance<SettingsRepository>();
     return MultiBlocProvider(
         providers: [
@@ -28,7 +30,7 @@ class SettingsContent extends StatelessWidget {
                 BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
                   return SettingSwitch(
                     state: state.isDarkMode,
-                    title: AppLocalizations.of(context)!.dark_mode,
+                    title: localization.dark_mode,
                     onClick: (newValue) => {
                       BlocProvider.of<ThemeBloc>(context)
                           .add(UpdateThemeEvent()),

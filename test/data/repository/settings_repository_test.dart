@@ -19,7 +19,7 @@ void main() {
       final insertedRows = await settingsRepository.getSettings();
 
       expect(insertedRows.id, 1);
-      expect(insertedRows.isDarkMode, 1);
+      expect(insertedRows.isDarkMode, 0);
     });
 
     test('Update option "Dark Mode', () async {

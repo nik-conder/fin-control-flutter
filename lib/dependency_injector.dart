@@ -1,11 +1,14 @@
 import 'package:fin_control/data/dataProvider/dao/profiles_dao.dart';
+import 'package:fin_control/data/dataProvider/dao/session_dao.dart';
 import 'package:fin_control/data/dataProvider/dao/settings_dao.dart';
 import 'package:fin_control/data/dataProvider/database_manager.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
+import 'package:fin_control/data/repository/session_repository.dart';
 import 'package:fin_control/data/repository/settings_repository.dart';
 import 'package:fin_control/domain/bloc/home/home_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
+import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -15,6 +18,7 @@ class DependencyInjector {
 
   static void setup() {
     getIt.registerSingleton<DatabaseManager>(SQLiteDatabase());
+    // DAO
 
     getIt.registerFactory<SettingsDao>(
         () => SettingsDao(getIt<DatabaseManager>()));
@@ -22,12 +26,21 @@ class DependencyInjector {
     getIt.registerFactory<ProfilesDAO>(
         () => ProfilesDAO(getIt<DatabaseManager>()));
 
+    getIt.registerFactory<SessionDao>(
+        () => SessionDao(getIt<DatabaseManager>()));
+
+    // Repositories
+
     getIt.registerFactory<SettingsRepository>(
         () => SettingsRepository(getIt<SettingsDao>()));
 
     getIt.registerFactory<ProfilesRepository>(
         () => ProfilesRepository(getIt<ProfilesDAO>()));
 
+    getIt.registerFactory<SessionRepository>(
+        () => SessionRepository(getIt<SessionDao>()));
+
+    // BloCs
     getIt.registerFactory<ThemeBloc>(
         () => ThemeBloc(getIt<SettingsRepository>()));
 
@@ -39,5 +52,7 @@ class DependencyInjector {
         () => SettingsBloc(getIt<SettingsRepository>()));
 
     getIt.registerFactory<ProfileListBloc>(() => ProfileListBloc());
+
+    getIt.registerFactory<SessionBloc>(() => SessionBloc());
   }
 }

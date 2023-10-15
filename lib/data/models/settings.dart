@@ -1,6 +1,6 @@
 class Settings {
   final int id;
-  final int isDarkMode; // Изменили тип на int
+  final int isDarkMode;
 
   Settings({
     required this.id,

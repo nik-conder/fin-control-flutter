@@ -60,12 +60,12 @@ class SettingsDao {
       final result = await database.query('settings', columns: ['isDarkMode']);
       final darkMode = result.first['isDarkMode'] as int;
       final isDarkMode = (darkMode == 1) ? true : false;
-
+      print("dao isDarkMode: $isDarkMode");
       yield* Stream.value(isDarkMode);
     } catch (e) {
       developer.log('',
           time: DateTime.now(), error: 'Error getting dark mode setting');
-      yield* Stream.value(false);
+      yield* const Stream.empty();
     }
   }
 }

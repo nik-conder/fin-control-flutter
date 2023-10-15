@@ -6,19 +6,22 @@ import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/presentation/ui/login/login_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-  final profileBloc = GetIt.instance<ProfileBloc>();
+  const LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Login'), actions: [
+        appBar: AppBar(title: Text(localization.title_login), actions: [
           BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
             return Tooltip(
-                message: (state.isDarkMode) ? 'Light mode' : 'Dark mode',
+                message: (state.isDarkMode)
+                    ? localization.light_mode
+                    : localization.dark_mode,
                 child: IconButton(
                   onPressed: () {
                     BlocProvider.of<ThemeBloc>(context).add(UpdateThemeEvent());
@@ -29,13 +32,7 @@ class LoginPage extends StatelessWidget {
                 ));
           })
         ]),
-        body: BlocProvider(
-          create: (context) => profileBloc,
-          child: MultiBlocProvider(providers: [
-            BlocProvider<ProfileListBloc>(
-                create: (context) => ProfileListBloc()),
-          ], child: LoginContent()),
-        ),
+        body: LoginContent(),
       ),
     );
   }

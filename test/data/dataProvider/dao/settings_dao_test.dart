@@ -18,7 +18,7 @@ void main() {
       final insertedRows = await settingsDao.getSettings();
 
       expect(insertedRows.id, 1);
-      expect(insertedRows.isDarkMode, 1);
+      expect(insertedRows.isDarkMode, 0);
     });
 
     group('Dark mode', () {

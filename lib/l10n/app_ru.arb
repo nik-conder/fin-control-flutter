@@ -1,5 +1,9 @@
 { 
   "create_new_profile": "Создайте новый профиль",
-  "dark_mode": "Тёмная тема",
-  "title_settings": "Настройки"
+  "dark_mode": "Тёмный режим",
+  "light_mode": "Светлый режим",
+  "title_settings": "Настройки",
+  "title_home": "Главная",
+  "title_login": "Вход",
+  "title_logout": "Выйти"
 }

@@ -1,5 +1,9 @@
 { 
   "create_new_profile": "Create a new profile",
-  "dark_mode": "Dark Mode",
-  "title_settings": "Settings"
+  "dark_mode": "Dark mode",
+  "light_mode": "Light mode",
+  "title_settings": "Settings",
+  "title_home": "Home",
+  "title_login": "Login",
+  "title_logout": "Logout"
 }
