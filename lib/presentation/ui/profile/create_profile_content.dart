@@ -9,12 +9,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CreateProfileContent extends StatelessWidget {
-  final padding = const EdgeInsets.all(8);
-  final _controller = TextEditingController();
-  final ProfileBloc profileBloc = GetIt.instance<ProfileBloc>();
-
+class CreateProfileContent extends StatefulWidget {
   CreateProfileContent({Key? key}) : super(key: key);
+
+  @override
+  State<CreateProfileContent> createState() => _CreateProfileContentState();
+}
+
+class _CreateProfileContentState extends State<CreateProfileContent> {
+  Currency currencyView = Currency.usd;
+  final padding = const EdgeInsets.all(8);
+
+  final _controller = TextEditingController();
+
+  final ProfileBloc profileBloc = GetIt.instance<ProfileBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +82,26 @@ class CreateProfileContent extends StatelessWidget {
                           })),
                 ),
               ),
-              Padding(padding: padding, child: const ChangeCurrencyComponent()),
+              Padding(
+                padding: padding,
+                child: SegmentedButton<Currency>(
+                  segments: const <ButtonSegment<Currency>>[
+                    ButtonSegment<Currency>(
+                        value: Currency.usd, label: Text('USD')),
+                    ButtonSegment<Currency>(
+                        value: Currency.rub, label: Text('RUB')),
+                    ButtonSegment<Currency>(
+                        value: Currency.eur, label: Text('EUR')),
+                  ],
+                  selected: <Currency>{currencyView},
+                  onSelectionChanged: (Set<Currency> newSelection) {
+                    currencyView = newSelection.first;
+                    setState(() {
+                      currencyView = newSelection.first;
+                    });
+                  },
+                ),
+              ),
               Padding(
                   padding: padding,
                   child: Row(
@@ -87,7 +114,7 @@ class CreateProfileContent extends StatelessWidget {
                               child: OutlinedButton(
                                   onPressed: () => {
                                         profileBloc.add(CreateProfileEvent(
-                                            _controller.text)),
+                                            _controller.text, currencyView)),
                                         BlocProvider.of<ProfileListBloc>(
                                                 context)
                                             .add(UpdateProfilesListEvent())
@@ -102,39 +129,6 @@ class CreateProfileContent extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
-  }
-}
-
-class ChangeCurrencyComponent extends StatefulWidget {
-  const ChangeCurrencyComponent({super.key});
-
-  @override
-  State<ChangeCurrencyComponent> createState() =>
-      _ChangeCurrencyComponentState();
-}
-
-class _ChangeCurrencyComponentState extends State<ChangeCurrencyComponent> {
-  Currency currencyView = Currency.usd;
-
-  @override
-  Widget build(BuildContext context) {
-    return SegmentedButton<Currency>(
-      segments: const <ButtonSegment<Currency>>[
-        ButtonSegment<Currency>(value: Currency.usd, label: Text('USD')),
-        ButtonSegment<Currency>(value: Currency.rub, label: Text('RUB')),
-        ButtonSegment<Currency>(value: Currency.eur, label: Text('EUR')),
-      ],
-      selected: <Currency>{currencyView},
-      onSelectionChanged: (Set<Currency> newSelection) {
-        currencyView = newSelection.first;
-        setState(() {
-          // By default there is only a single segment that can be
-          // selected at one time, so its value is always the first
-          // item in the selected set.
-          currencyView = newSelection.first;
-        });
       },
     );
   }

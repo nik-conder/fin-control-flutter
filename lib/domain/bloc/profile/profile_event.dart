@@ -1,3 +1,4 @@
+import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/data/models/profile.dart';
 
 abstract class ProfileEvent {}
@@ -10,11 +11,12 @@ class LoadProfiles extends ProfileEvent {
 
 class CreateProfileEvent extends ProfileEvent {
   final String name;
+  final Currency currency;
 
-  CreateProfileEvent(this.name);
+  CreateProfileEvent(this.name, this.currency);
 
   @override
-  List<Object?> get props => [name];
+  List<Object?> get props => [name, currency];
 }
 
 class GetBalanceEvent extends ProfileEvent {

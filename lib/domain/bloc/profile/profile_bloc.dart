@@ -37,7 +37,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   _createProfile(CreateProfileEvent event, Emitter<ProfileState> emit) {
     try {
-      final profile = Profile(name: event.name);
+      final profile = Profile(name: event.name, currency: event.currency);
 
       final result = _profilesRepository.insertProfile(profile);
 
@@ -47,7 +47,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } catch (e) {
       developer.log('',
           time: DateTime.now(), error: 'Ошибка при создании профиля');
-      emit(CreateProfileError('Error'));
+      emit(const CreateProfileError('Error'));
     }
   }
 }

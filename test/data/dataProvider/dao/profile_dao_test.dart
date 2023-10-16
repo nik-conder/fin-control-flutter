@@ -1,4 +1,5 @@
 import 'package:fin_control/data/dataProvider/database_manager.dart';
+import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/dependency_injector.dart';
 import 'package:fin_control/data/dataProvider/dao/profiles_dao.dart';
 import 'package:fin_control/data/models/profile.dart';
@@ -10,8 +11,11 @@ void main() {
   group('ProfilesDAO Tests', () {
     final getIt = GetIt.instance;
 
-    const String profileName = 'Test prfile #1';
-    const double profileBalance = 123456.789;
+    final profile1 = Profile(
+        id: 1,
+        name: "Test prfile #1",
+        balance: 123456.789,
+        currency: Currency.usd);
 
     late ProfilesDAO profileDao;
 
@@ -21,27 +25,24 @@ void main() {
     });
 
     test('Insert Profile', () async {
-      final settings =
-          Profile(id: 1, name: profileName, balance: profileBalance);
-
-      final insertedRows = await profileDao.insertProfile(settings);
-
+      final insertedRows = await profileDao.insertProfile(profile1);
       expect(1, insertedRows);
     });
 
     test('Get name by id', () async {
       final result = await profileDao.getName(1);
       debugPrint('Profile name: $result');
-      expect(profileName, result);
+      expect(profile1.name, result);
     });
 
     test('Get profile by id', () async {
       final result = await profileDao.getProfile(1);
-
+      debugPrint('Profile: ${result.name} ${result.balance} ');
       expect(result, isNotNull);
-      expect(result.name, profileName);
-      expect(result.balance, profileBalance);
-      debugPrint('Profile: ${result.name}');
+      expect(1, result.id);
+      expect(profile1.name, result.name);
+      expect(profile1.balance, result.balance);
+      expect(profile1.currency, result.currency);
     });
 
     test('Get all profiles', () async {
@@ -52,8 +53,9 @@ void main() {
       result.listen((value) => {
             expect(value, isNotNull),
             expect(value.length, 1),
-            expect(value[0].name, profileName),
+            expect(value[0].name, profile1.name),
             expect(value[0].id, 1),
+            expect(value[0].balance, profile1.balance),
             debugPrint('Profile: ${value[0].name}'),
           });
     });
@@ -65,7 +67,7 @@ void main() {
         debugPrint('Balance: $result');
 
         result.listen((event) {
-          expect(event, profileBalance);
+          expect(event, profile1.balance);
         });
       });
 

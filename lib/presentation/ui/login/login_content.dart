@@ -31,7 +31,7 @@ class LoginContent extends StatelessWidget {
                   return Text('пусто ${snapshot.data.toString()}');
                 }
               }),
-          Column(
+          Row(
             children: [
               OutlinedButton(
                   onPressed: () {
@@ -48,8 +48,6 @@ class LoginContent extends StatelessWidget {
             ],
           ),
           CreateProfileContent(),
-          Text("или выберите из списка",
-              style: Theme.of(context).textTheme.bodyLarge),
           ProfilesList(),
         ],
       ),

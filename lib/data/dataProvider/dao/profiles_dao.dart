@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:fin_control/data/dataProvider/database_manager.dart';
+import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/data/models/profile.dart';
 
 class ProfilesDAO {
@@ -13,8 +14,8 @@ class ProfilesDAO {
     try {
       final database = await databaseManager.initializeDB();
       return await database.rawInsert(
-          'INSERT INTO profiles (id, name, balance) VALUES (?, ?, ?)',
-          [profile.id, profile.name, profile.balance]);
+          'INSERT INTO profiles (id, name, balance, currency) VALUES (?, ?, ?, ?)',
+          [profile.id, profile.name, profile.balance, profile.currency.name]);
     } catch (e) {
       developer.log('Error inserting rows: $e', time: DateTime.now());
       return 0;
@@ -54,8 +55,6 @@ class ProfilesDAO {
         developer.log('Error getting balance: $e', time: DateTime.now());
         yield 0;
       }
-      await Future.delayed(Duration(
-          seconds: 5)); // Опрашивать базу каждые 5 секунд (или другой интервал)
     }
   }
 
@@ -64,14 +63,11 @@ class ProfilesDAO {
       final database = await databaseManager.initializeDB();
       final result =
           await database.query(_columnName, where: 'id = ?', whereArgs: [id]);
-      if (result.isNotEmpty) {
-        return Profile.fromMap(result.first);
-      } else {
-        return Profile(id: 0, name: 'Unknown');
-      }
+
+      return Profile.fromMap(result.first);
     } catch (e) {
-      developer.log('Error getting name: $e', time: DateTime.now());
-      return Profile(id: 0, name: 'Unknown');
+      developer.log('Error getting profile: $e', time: DateTime.now());
+      return Profile(id: 0, name: '', balance: 0, currency: Currency.usd);
     }
   }
 

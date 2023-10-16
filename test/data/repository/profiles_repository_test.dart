@@ -1,3 +1,4 @@
+import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/dependency_injector.dart';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
@@ -11,6 +12,7 @@ void main() {
 
     const String profileName = 'Test prfile #1';
     const double profileBalance = 123456.789;
+    const Currency profileCurrency = Currency.usd;
 
     late ProfilesRepository profilesRepository;
 
@@ -20,8 +22,11 @@ void main() {
     });
 
     test('Insert Profile', () async {
-      final profile =
-          Profile(id: 1, name: profileName, balance: profileBalance);
+      final profile = Profile(
+          id: 1,
+          name: profileName,
+          balance: profileBalance,
+          currency: profileCurrency);
 
       final insertedRows = await profilesRepository.insertProfile(profile);
 
@@ -40,6 +45,9 @@ void main() {
       result.then((value) => {
             expect(value, isNotNull),
             expect(value.name, profileName),
+            expect(value.id, 1),
+            expect(value.balance, profileBalance),
+            expect(value.currency, profileCurrency),
             debugPrint('Profile: ${value.name}'),
           });
     });
@@ -52,6 +60,8 @@ void main() {
         expect(event.length, 1);
         expect(event[0].name, profileName);
         expect(event[0].id, 1);
+        expect(event[0].balance, profileBalance);
+        expect(event[0].currency, profileCurrency);
         debugPrint('Profile: ${event[0].name}');
       });
     });
