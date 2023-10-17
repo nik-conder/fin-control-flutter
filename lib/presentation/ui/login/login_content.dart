@@ -1,13 +1,8 @@
-import 'package:fin_control/data/models/session.dart';
-import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
-import 'package:fin_control/domain/bloc/profile/list/profile_list_state.dart';
 import 'package:fin_control/domain/bloc/session/session_bloc.dart';
-import 'package:fin_control/domain/bloc/session/session_event.dart';
-import 'package:fin_control/presentation/ui/profile/create_profile_content.dart';
 import 'package:fin_control/presentation/ui/profile/profiles_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginContent extends StatelessWidget {
   final sessionBloc = GetIt.instance<SessionBloc>();
@@ -16,41 +11,60 @@ class LoginContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
+    final localization = AppLocalizations.of(context)!;
+    return const SizedBox(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          StreamBuilder(
-              stream: sessionBloc.session,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data.toString());
-                } else if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
-                } else {
-                  return Text('пусто ${snapshot.data.toString()}');
-                }
-              }),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              OutlinedButton(
-                  onPressed: () {
-                    BlocProvider.of<SessionBloc>(context)
-                        .add(SessionCreateEvent(Session(profileId: 1)));
-                  },
-                  child: Text("Login")),
-              OutlinedButton(
-                  onPressed: () {
-                    BlocProvider.of<SessionBloc>(context)
-                        .add(SessionDeleteEvent());
-                  },
-                  child: Text("Delete")),
+              Center(
+                child: ProfilesList(),
+              )
             ],
-          ),
-          CreateProfileContent(),
-          ProfilesList(),
+          )
         ],
       ),
     );
   }
 }
+
+
+/*
+
+ Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      StreamBuilder(
+          stream: sessionBloc.session,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data.toString());
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            } else {
+              return Text('пусто ${snapshot.data.toString()}');
+            }
+          }),
+    ],
+  ),
+  Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      OutlinedButton(
+          onPressed: () {
+            BlocProvider.of<SessionBloc>(context)
+                .add(SessionCreateEvent(Session(profileId: 1)));
+          },
+          child: Text("Login")),
+      OutlinedButton(
+          onPressed: () {
+            BlocProvider.of<SessionBloc>(context)
+                .add(SessionDeleteEvent());
+          },
+          child: Text("Delete")),
+    ],
+  ),
+
+*/

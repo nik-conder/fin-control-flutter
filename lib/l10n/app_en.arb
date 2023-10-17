@@ -1,9 +1,21 @@
-{ 
-  "create_new_profile": "Create a new profile",
+{  
   "dark_mode": "Dark mode",
   "light_mode": "Light mode",
   "title_settings": "Settings",
   "title_home": "Home",
   "title_login": "Login",
-  "title_logout": "Logout"
+  "title_logout": "Logout",
+  "title_new_profile": "New profile",
+  "not_profile": "Not profile",
+  "loading":"Loading",
+  "no_data":"No data",
+  "hidden_balance": "Hidden balance",
+  "data_is_hidden_description": "Enable balance display in Settings",
+  "wait": "Please, wait..",
+  "create_new_profile": "Create new profile",
+  "created_profile": "New profile created",
+  "create_profile_description": "To continue, you need to give a name to the new profile and select a currency. Please note that it will not be possible to change the currency after creating the account.",
+  "name_profile_example": "For example: «Account #1» or «Main Account»",
+  "profile_name": "Profile name",
+  "create": "Create"
 }

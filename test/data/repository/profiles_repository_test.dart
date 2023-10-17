@@ -16,9 +16,16 @@ void main() {
 
     late ProfilesRepository profilesRepository;
 
-    setUp(() {
+    setUpAll(() {
       DependencyInjector.setup();
+    });
+
+    setUp(() {
       profilesRepository = getIt<ProfilesRepository>();
+    });
+
+    tearDownAll(() {
+      getIt.reset();
     });
 
     test('Insert Profile', () async {
@@ -90,10 +97,6 @@ void main() {
           expect(event, resultBalance);
         });
       });
-    });
-
-    tearDown(() {
-      getIt.reset();
     });
   });
 }

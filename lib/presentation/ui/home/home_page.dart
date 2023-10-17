@@ -1,7 +1,5 @@
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/models/profile.dart';
-import 'package:fin_control/domain/bloc/home/home_bloc.dart';
-import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
@@ -20,7 +18,6 @@ class HomePage extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    // Извлечение профиля из аргументов
     final Profile profile = args['profile'];
 
     final localization = AppLocalizations.of(context)!;

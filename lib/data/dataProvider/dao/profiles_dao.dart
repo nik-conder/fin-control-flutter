@@ -71,14 +71,14 @@ class ProfilesDAO {
     }
   }
 
-  Future<double> updateBalance(int id, double balance) async {
+  Future<int> updateBalance(int id, double balance) async {
     try {
       final database = await databaseManager.initializeDB();
       final res = await database.rawUpdate(
         'UPDATE profiles SET balance = ? WHERE id = ?',
         [balance, id],
       );
-      return res.toDouble();
+      return res;
     } catch (e) {
       developer.log('Error updating balance: $e', time: DateTime.now());
       return 0;

@@ -1,5 +1,3 @@
-import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
-import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
@@ -14,26 +12,24 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: Text(localization.title_login), actions: [
-          BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
-            return Tooltip(
-                message: (state.isDarkMode)
-                    ? localization.light_mode
-                    : localization.dark_mode,
-                child: IconButton(
-                  onPressed: () {
-                    BlocProvider.of<ThemeBloc>(context).add(UpdateThemeEvent());
-                  },
-                  icon: (state.isDarkMode)
-                      ? const Icon(Icons.light_mode_outlined)
-                      : const Icon(Icons.dark_mode_outlined),
-                ));
-          })
-        ]),
-        body: LoginContent(),
-      ),
+    return Scaffold(
+      appBar: AppBar(title: Text(localization.title_login), actions: [
+        BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
+          return Tooltip(
+              message: (state.isDarkMode)
+                  ? localization.light_mode
+                  : localization.dark_mode,
+              child: IconButton(
+                onPressed: () {
+                  BlocProvider.of<ThemeBloc>(context).add(UpdateThemeEvent());
+                },
+                icon: (state.isDarkMode)
+                    ? const Icon(Icons.light_mode_outlined)
+                    : const Icon(Icons.dark_mode_outlined),
+              ));
+        })
+      ]),
+      body: LoginContent(),
     );
   }
 }

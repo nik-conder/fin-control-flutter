@@ -27,9 +27,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
   }
 
-  _updateBalance(UpdateBalance event, Emitter<ProfileState> emit) {
+  _updateBalance(UpdateBalance event, Emitter<ProfileState> emit) async {
+    final random = Random();
+    double randomDouble = 100 + random.nextDouble() * (10000 - 100);
     try {
-      _profilesRepository.updateBalance(event.id, event.balance);
+      final result =
+          await _profilesRepository.updateBalance(event.id, randomDouble);
+      if (result == 1) {
+        _getBalance(event.id);
+      }
+    } catch (e) {
+      developer.log('', time: DateTime.now(), error: e.toString());
+    }
+  }
+
+  _getBalance(int id) async {
+    try {
+      final balance = await _profilesRepository.getBalance(id);
+      balance.listen((event) {
+        _balanceSubject.add(event);
+      });
     } catch (e) {
       developer.log('', time: DateTime.now(), error: e.toString());
     }

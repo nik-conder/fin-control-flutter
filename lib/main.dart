@@ -8,6 +8,7 @@ import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/presentation/ui/home/home_page.dart';
 import 'package:fin_control/presentation/ui/login/login_page.dart';
+import 'package:fin_control/presentation/ui/profile/create_profile_page.dart';
 import 'package:fin_control/presentation/ui/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +55,9 @@ class MyApp extends StatelessWidget {
             routes: <String, WidgetBuilder>{
               '/home': (BuildContext context) => const HomePage(),
               '/settings': (BuildContext context) => const SettingsPage(),
-              '/login': (BuildContext context) => LoginPage(),
+              '/login': (BuildContext context) => const LoginPage(),
+              '/login/create_profile': (BuildContext context) =>
+                  const CreateProfilePage()
             },
           );
         }));

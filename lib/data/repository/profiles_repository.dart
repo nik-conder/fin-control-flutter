@@ -26,7 +26,7 @@ class ProfilesRepository {
     yield* profilesDao.getBalance(id);
   }
 
-  Future<double> updateBalance(int id, double balance) async {
+  Future<int> updateBalance(int id, double balance) async {
     return profilesDao.updateBalance(id, balance);
   }
 }

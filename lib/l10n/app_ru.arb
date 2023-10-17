@@ -1,9 +1,21 @@
 { 
-  "create_new_profile": "Создайте новый профиль",
   "dark_mode": "Тёмный режим",
   "light_mode": "Светлый режим",
   "title_settings": "Настройки",
   "title_home": "Главная",
   "title_login": "Вход",
-  "title_logout": "Выйти"
+  "title_logout": "Выйти",
+  "title_new_profile": "Новый профиль",
+  "not_profile": "Нет профиля",
+  "loading":"Загрузка",
+  "no_data":"Нет данных",
+  "hidden_balance": "Баланс скрыт",
+  "data_is_hidden_description": "Включите отображение баланса в Настройка",
+  "wait": "Пожалуйста, подождите..",
+  "create_new_profile": "Создайте новый профиль",
+  "created_profile": "Новый профиль создан",
+  "create_profile_description": "Для продолжения необходимо дать название новому профилю и выбрать валюту. Обратите внимание, что после создания счета изменить валюту будет невозможно.",
+  "name_profile_example": "Например: «Счёт #1» или «Основной счёт»",
+  "profile_name": "Название профиля",
+  "create": "Создать"
 }
