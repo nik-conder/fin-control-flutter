@@ -84,26 +84,56 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
                         ),
                       )),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 8, top: 0, bottom: 32),
-                    child: SegmentedButton<Currency>(
-                      segments: const <ButtonSegment<Currency>>[
-                        ButtonSegment<Currency>(
-                            value: Currency.usd, label: Text('USD')),
-                        ButtonSegment<Currency>(
-                            value: Currency.rub, label: Text('RUB')),
-                        ButtonSegment<Currency>(
-                            value: Currency.eur, label: Text('EUR')),
-                      ],
-                      selected: <Currency>{currencyView},
-                      onSelectionChanged: (Set<Currency> newSelection) {
-                        currencyView = newSelection.first;
-                        setState(() {
-                          currencyView = newSelection.first;
-                        });
-                      },
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 8, top: 0, bottom: 32),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  SegmentedButton<Currency>(
+                                    segments: const <ButtonSegment<Currency>>[
+                                      ButtonSegment<Currency>(
+                                          value: Currency.usd,
+                                          label: Text('USD')),
+                                      ButtonSegment<Currency>(
+                                          value: Currency.rub,
+                                          label: Text('RUB')),
+                                      ButtonSegment<Currency>(
+                                          value: Currency.eur,
+                                          label: Text('EUR')),
+                                    ],
+                                    selected: <Currency>{currencyView},
+                                    onSelectionChanged:
+                                        (Set<Currency> newSelection) {
+                                      currencyView = newSelection.first;
+                                      setState(() {
+                                        currencyView = newSelection.first;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text("In development"),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(localization.more))
+                                ],
+                              ))
+                        ],
+                      )),
                   Padding(
                       padding: const EdgeInsets.only(
                           left: 8, right: 8, top: 0, bottom: 32),

@@ -88,7 +88,10 @@ class HomeHead extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text("Profile name: ${profile.name}")],
+                      children: [
+                        Text("Profile name: ${profile.name}"),
+                        //Text("selected profile: ${selectedProfile.name}")
+                      ],
                     )
                   ],
                 ),

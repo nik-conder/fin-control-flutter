@@ -12,9 +12,16 @@ void main() {
 
     late SessionDao sessionDao;
 
-    setUp(() {
+    setUpAll(() {
       DependencyInjector.setup();
+    });
+
+    setUp(() {
       sessionDao = getIt<SessionDao>();
+    });
+
+    tearDownAll(() {
+      getIt.reset();
     });
 
     test('Insert Session', () async {
@@ -25,19 +32,28 @@ void main() {
 
     test('Get session', () async {
       final result = await sessionDao.getSession();
-      result.listen((event) {
-        expect(event, isA<Session>());
 
-        expect(session1.id, event.id);
-        expect(session1.profileId, event.profileId);
-      });
+      expect(result, isA<Session>());
+
+      if (result != null) {
+        expect(result.id, session1.id);
+        expect(result.profileId, session1.profileId);
+      } else {
+        fail('Session is null');
+      }
     });
 
-    test('Delete Session', () async {
+    test('Delete all sessions', () async {
+      // Create 10 sessions
+      for (int i = 0; i < 10; i++) {
+        await sessionDao.insertSession(Session(id: i, profileId: i));
+      }
+
+      // Delete all sessions
       final result = await sessionDao.deleteSessions();
-      expect(result, 1);
-    });
 
-    tearDown(() => getIt.reset());
+      // Check if all sessions were deleted
+      expect(result, 10);
+    });
   });
 }

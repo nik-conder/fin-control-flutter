@@ -17,5 +17,7 @@
   "create_profile_description": "To continue, you need to give a name to the new profile and select a currency. Please note that it will not be possible to change the currency after creating the account.",
   "name_profile_example": "For example: «Account #1» or «Main Account»",
   "profile_name": "Profile name",
-  "create": "Create"
+  "create": "Create",
+  "next": "Next",
+  "more": "More.."
 }

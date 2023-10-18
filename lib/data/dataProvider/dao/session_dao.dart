@@ -13,26 +13,28 @@ class SessionDao {
     final database = await databaseManager.initializeDB();
 
     try {
-      return await database.rawInsert(
+      final result = await database.rawInsert(
           'INSERT INTO sessions (id, profileId) VALUES (?, ?)',
           [session.id, session.profileId]);
+      developer.log('Inserted Rows: $result', time: DateTime.now());
+      return result;
     } catch (e) {
       developer.log('Error inserting rows: $e', time: DateTime.now());
       return 0;
     }
   }
 
-  Stream<Session> getSession() async* {
+  Future<Session?> getSession() async {
     final database = await databaseManager.initializeDB();
 
     try {
       final result =
           await database.query(_columnName, columns: ['id', 'profileId']);
       final session = Session.fromMap(result.first);
-      yield* Stream.value(session);
+      return session;
     } catch (e) {
       developer.log('Error getting session: $e', time: DateTime.now());
-      yield* Stream.empty();
+      return null;
     }
   }
 
@@ -40,7 +42,9 @@ class SessionDao {
     final database = await databaseManager.initializeDB();
 
     try {
-      return await database.delete(_columnName);
+      final result = await database.delete(_columnName);
+      developer.log('Deleted Rows: $result', time: DateTime.now());
+      return result;
     } catch (e) {
       developer.log('Error deleting session: $e', time: DateTime.now());
       return 0;

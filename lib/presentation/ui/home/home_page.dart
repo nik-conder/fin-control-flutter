@@ -1,5 +1,8 @@
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/models/profile.dart';
+import 'package:fin_control/data/models/session.dart';
+import 'package:fin_control/domain/bloc/session/session_bloc.dart';
+import 'package:fin_control/domain/bloc/session/session_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
@@ -15,6 +18,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sessionBloc = BlocProvider.of<SessionBloc>(context);
+
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
@@ -55,6 +60,8 @@ class HomePage extends StatelessWidget {
                   child: IconButton(
                     onPressed: () {
                       //Navigator.pushReplacementNamed(context, '/login');
+                      BlocProvider.of<SessionBloc>(context)
+                          .add(SessionDeleteEvent());
                       Navigator.popAndPushNamed(context, '/login');
                     },
                     icon: const Icon(Icons.logout_outlined),

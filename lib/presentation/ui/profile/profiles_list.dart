@@ -2,6 +2,8 @@ import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/list/profile_list_state.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
+import 'package:fin_control/domain/bloc/session/session_bloc.dart';
+import 'package:fin_control/domain/bloc/session/session_event.dart';
 import 'package:fin_control/presentation/ui/info_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -129,6 +131,8 @@ class _ProfilesListState extends State<ProfilesList> {
                     padding: padding,
                     child: TextButton(
                         onPressed: () {
+                          BlocProvider.of<SessionBloc>(context)
+                              .add(SessionCreateEvent(_selectedProfile!));
                           Navigator.pushReplacementNamed(context, '/home',
                               arguments: {'profile': _selectedProfile});
                         },

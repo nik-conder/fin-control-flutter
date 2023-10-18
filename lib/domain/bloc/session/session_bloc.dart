@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'dart:developer' as developer;
 import 'package:fin_control/data/models/session.dart';
 import 'package:fin_control/data/repository/session_repository.dart';
 import 'package:fin_control/domain/bloc/session/session_event.dart';
@@ -17,19 +18,20 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   SessionBloc() : super(SessionInitial()) {
     on<SessionCreateEvent>(_sessionCreate);
     on<SessionDeleteEvent>(_sessionDelete);
-    _sessionRepository.getSession().listen((event) {
-      print("ОТПРАВЛЕНО В СТРИМ");
-      sessionStream.add(event);
-    });
+  }
+
+  _sessionGet(SessionLoad event, Emitter<SessionState> emit) async {
+    try {
+      return await _sessionRepository.getSession();
+    } catch (e) {
+      developer.log('', time: DateTime.now(), error: e.toString());
+      return Session(id: 0, profileId: 0);
+    }
   }
 
   _sessionDelete(SessionDeleteEvent event, Emitter<SessionState> emit) async {
     try {
-      final deleteSession = await _sessionRepository.deleteSessions();
-
-      if (deleteSession == 1) {
-        emit(SessionInitial());
-      }
+      await _sessionRepository.deleteSessions();
     } catch (e) {
       emit(const SessionError("Error delete"));
     }
@@ -37,7 +39,9 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   _sessionCreate(SessionCreateEvent event, Emitter<SessionState> emit) async {
     try {
-      await _sessionRepository.insertSession(Session(profileId: 1));
+      await _sessionRepository.deleteSessions();
+      await _sessionRepository
+          .insertSession(Session(profileId: event.profile.id!));
     } catch (e) {
       print(e);
     }

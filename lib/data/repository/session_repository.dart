@@ -16,13 +16,12 @@ class SessionRepository {
     }
   }
 
-  Stream<Session> getSession() async* {
+  Future<Session?> getSession() async {
     try {
-      final result = await sessionDao.getSession();
-      yield* result;
+      return await sessionDao.getSession();
     } catch (e) {
       developer.log('Error getting session: $e', time: DateTime.now());
-      yield* Stream.empty();
+      return null;
     }
   }
 
