@@ -10,9 +10,11 @@ void main() {
   group('ProfilesRepository Tests', () {
     GetIt getIt = GetIt.instance;
 
-    const String profileName = 'Test prfile #1';
-    const double profileBalance = 123456.789;
-    const Currency profileCurrency = Currency.usd;
+    final profile1 = Profile(
+        id: 1,
+        name: "Test prfile #1",
+        balance: 123456.789,
+        currency: Currency.usd);
 
     late ProfilesRepository profilesRepository;
 
@@ -30,10 +32,10 @@ void main() {
 
     test('Insert Profile', () async {
       final profile = Profile(
-          id: 1,
-          name: profileName,
-          balance: profileBalance,
-          currency: profileCurrency);
+          id: profile1.id,
+          name: profile1.name,
+          balance: profile1.balance,
+          currency: profile1.currency);
 
       final insertedRows = await profilesRepository.insertProfile(profile);
 
@@ -51,10 +53,10 @@ void main() {
 
       result.then((value) => {
             expect(value, isNotNull),
-            expect(value.name, profileName),
-            expect(value.id, 1),
-            expect(value.balance, profileBalance),
-            expect(value.currency, profileCurrency),
+            expect(value.name, profile1.name),
+            expect(value.id, profile1.id),
+            expect(value.balance, profile1.balance),
+            expect(value.currency, profile1.currency),
             debugPrint('Profile: ${value.name}'),
           });
     });
@@ -65,10 +67,10 @@ void main() {
       result.listen((event) {
         expect(event, isNotNull);
         expect(event.length, 1);
-        expect(event[0].name, profileName);
-        expect(event[0].id, 1);
-        expect(event[0].balance, profileBalance);
-        expect(event[0].currency, profileCurrency);
+        expect(event[0].name, profile1.name);
+        expect(event[0].id, profile1.id);
+        expect(event[0].balance, profile1.balance);
+        expect(event[0].currency, profile1.currency);
         debugPrint('Profile: ${event[0].name}');
       });
     });
@@ -80,12 +82,13 @@ void main() {
         debugPrint('Balance: $result');
 
         result.listen((event) {
-          expect(event, profileBalance);
+          expect(event, profile1.balance);
         });
       });
 
       test('Update balance: + 100500', () async {
-        final result = await profilesRepository.updateBalance(1, 100500);
+        final result =
+            await profilesRepository.updateBalance(1, profile1.balance);
 
         expect(1, result);
 
