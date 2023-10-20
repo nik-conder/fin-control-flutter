@@ -49,7 +49,8 @@ class SettingsContent extends StatelessWidget {
                   children: [
                     SettingSwitch(
                       state: false,
-                      title: '...',
+                      title: 'Test title option',
+                      description: 'test description option',
                       onClick: (newValue) => {},
                     )
                   ],

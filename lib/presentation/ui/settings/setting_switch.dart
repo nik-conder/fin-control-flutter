@@ -29,10 +29,65 @@ class SettingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME: переделать
     return Expanded(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child: Padding(
+      padding: paddingAll,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 8,
+                  top: 8,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                      softWrap: true,
+                    )
+                  ],
+                ),
+              ),
+              if (description != null)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    top: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        // FIXME: text not wrapped
+                        (description != null) ? description! : '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        softWrap: true,
+                      )
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          Column(children: [
+            Switch(
+              value: state,
+              onChanged: onClick,
+              thumbIcon: thumbIcon,
+            ),
+          ])
+        ],
+      ),
+    ));
+  }
+}
+
+/*
+Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -63,5 +118,4 @@ class SettingSwitch extends StatelessWidget {
         ),
       ])
     ]));
-  }
-}
+*/

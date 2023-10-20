@@ -64,12 +64,15 @@ class _BoxTipComponentState extends State<BoxTipComponent> {
           icon: const Icon(Icons.info_outline),
           content: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: Text(tips.keys.elementAt(currentTip),
-                          style: Theme.of(context).textTheme.titleMedium))
-                ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Text(tips.keys.elementAt(currentTip),
+                            style: Theme.of(context).textTheme.titleMedium))
+                  ],
+                ),
               ),
               Row(
                 children: [

@@ -21,13 +21,14 @@ class ProfileListBloc extends Bloc<ProfileListEvent, ProfileListState> {
     on<UpdateProfilesListEvent>(_updateProfilesList);
   }
 
-  void _updateProfilesList(
-      UpdateProfilesListEvent event, Emitter<ProfileListState> emit) {
-    _profilesRepository.getAllProfiles().listen((profile) {
-      if (profile.isNotEmpty) {
-        _profilesSubject.add(profile);
-        profilesStream;
-      }
+  _updateProfilesList(
+      UpdateProfilesListEvent event, Emitter<ProfileListState> emit) async {
+    final result = _profilesRepository.getAllProfiles();
+
+    result.listen((event) {
+      if (event.isNotEmpty) _profilesSubject.sink.add(event);
+    }, onError: (error) {
+      _profilesSubject.addError(error);
     });
   }
 

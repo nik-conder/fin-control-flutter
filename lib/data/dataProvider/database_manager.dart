@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 abstract class DatabaseManager {
@@ -17,7 +18,7 @@ class SQLiteDatabase implements DatabaseManager {
   final String nameDB = 'fin_control_app.db';
 
   final bool memoryDatabasePath =
-      true; // flag to use inMemoryDatabasePath, flags: kDebugMode or true
+      false; // flag to use inMemoryDatabasePath, flags: kDebugMode or true
 
   final String _tableSettings =
       'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)';
@@ -37,7 +38,7 @@ class SQLiteDatabase implements DatabaseManager {
     sqfliteFfiInit();
 
     // If current mode is debug, use inMemoryDatabasePath
-    if (memoryDatabasePath) {
+    if (kDebugMode) {
       db = await databaseFactory.openDatabase(inMemoryDatabasePath,
           options: OpenDatabaseOptions(
             version: version,

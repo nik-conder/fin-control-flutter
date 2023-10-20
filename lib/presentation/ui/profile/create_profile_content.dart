@@ -124,9 +124,10 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
                                       onPressed: () {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
-                                            content: Text("In development"),
-                                          ),
+                                          SnackBar(
+                                              showCloseIcon: true,
+                                              content: Text(
+                                                  localization.in_development)),
                                         );
                                       },
                                       child: Text(localization.more))

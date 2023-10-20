@@ -68,12 +68,14 @@ class HomePage extends StatelessWidget {
             ],
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           ),
-          body: Column(
-            children: [
-              HomeHead(profile: profile),
-              const HomeContent(),
-              const FootComponent()
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                HomeHead(profile: profile),
+                const HomeContent(),
+                const FootComponent()
+              ],
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
