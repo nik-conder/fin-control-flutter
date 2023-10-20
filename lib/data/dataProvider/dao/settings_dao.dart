@@ -42,30 +42,29 @@ class SettingsDao {
   }
 
   Future<Settings> getSettings() async {
-    final database = await databaseManager.initializeDB();
-
     try {
+      final database = await databaseManager.initializeDB();
       final result = await database.query(_columnName);
       final settings = Settings.fromMap(result.first);
       return settings;
     } catch (e) {
       developer.log('', time: DateTime.now(), error: 'Error getting settings');
-      return Settings(id: 0, isDarkMode: 0);
+      return Settings(id: 0, isDarkMode: 0); // FIXME return null
     }
   }
 
-  Stream<bool> getDarkModeSetting() async* {
+  Future<bool> getDarkModeSetting() async {
     try {
       final database = await databaseManager.initializeDB();
       final result = await database.query('settings', columns: ['isDarkMode']);
       final darkMode = result.first['isDarkMode'] as int;
       final isDarkMode = (darkMode == 1) ? true : false;
-      print("dao isDarkMode: $isDarkMode");
-      yield* Stream.value(isDarkMode);
+      developer.log('dao isDarkMode: $isDarkMode', time: DateTime.now());
+      return isDarkMode;
     } catch (e) {
       developer.log('',
           time: DateTime.now(), error: 'Error getting dark mode setting');
-      yield* const Stream.empty();
+      return false;
     }
   }
 }

@@ -19,5 +19,15 @@
   "profile_name": "Profile name",
   "create": "Create",
   "next": "Next",
-  "more": "More.."
+  "more": "More..",
+  "advice_title_1": "Always set aside a portion of your income.",
+  "advice_title_2": "Manage your expenses.",
+  "advice_title_3": "Invest your money.",
+  "advice_title_4": "Manage your debt.",
+  "advice_title_5": "Build a financial safety net.", 
+  "advice_description_1": "Strive to save at least 20% of your income as savings. If you start this practice today, you can create a fund for future needs and significantly improve your financial situation.",
+  "advice_description_2": "Regularly analyze your expenses and look for opportunities to save. For example, you can cancel unnecessary subscriptions, buy cheaper products, save on energy costs, etc.",
+  "advice_description_3": "Investing is one of the most effective ways to increase your savings. Diversify your portfolio by investing in stocks, bonds, real estate, and other types of investments.",
+  "advice_description_4": "If you have debts, plan your repayments and reduce interest rates. Try to pay off loans and debts on time to avoid penalties and additional costs.",
+  "advice_description_5": "Build up enough money for unexpected expenses. This can be the equivalent of three to six months worth of living expenses. Such a safety net will help you avoid financial problems in case of job loss, unexpected repair costs, or medical expenses."
 }

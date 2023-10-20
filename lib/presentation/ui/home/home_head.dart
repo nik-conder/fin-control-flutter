@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_event.dart';
@@ -7,17 +6,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-class HomeHead extends StatelessWidget {
+class HomeHead extends StatefulWidget {
   final Profile profile;
 
-  final ProfileBloc profileBloc = GetIt.instance<ProfileBloc>();
+  const HomeHead({super.key, required this.profile});
 
-  HomeHead({super.key, required this.profile});
+  @override
+  State<HomeHead> createState() => _HomeHeadState();
+}
+
+class _HomeHeadState extends State<HomeHead> {
+  final profileBloc = GetIt.instance<ProfileBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+    profileBloc.add(UpdateBalance(widget.profile.id!));
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormat = switch (widget.profile.currency) {
+      Currency.eur => "€",
+      Currency.usd => "\$",
+      Currency.rub => "₽",
+      _ => "???"
+    };
+
     final screenHeight = MediaQuery.of(context).size.height;
-    return BlocBuilder<ProfileBloc, ProfileState>(
+    return BlocBuilder(
+      bloc: profileBloc,
       builder: (context, state) {
         return SizedBox(
           height: screenHeight * 0.2,
@@ -45,51 +63,56 @@ class HomeHead extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(children: [
-                          Text(
-                            "\$",
-                            style: Theme.of(context).textTheme.headlineLarge,
-                          )
-                        ]),
-                        Column(
-                          children: [
-                            StreamBuilder<double>(
-                              stream: context.read<ProfileBloc>().balanceStream,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  double? data = snapshot.data;
-                                  return Text(
-                                    (data != null)
-                                        ? data.toStringAsFixed(2)
-                                        : "0.00",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge,
-                                  );
-                                } else {
-                                  return const CircularProgressIndicator();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            IconButton(
-                                enableFeedback: false,
-                                onPressed: () {
-                                  BlocProvider.of<ProfileBloc>(context)
-                                      .add(UpdateBalance(1, 0)); // todo
-                                },
-                                icon: Icon(Icons.add))
-                          ],
-                        )
+                        Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Column(children: [
+                              Text(
+                                currencyFormat,
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                              )
+                            ])),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Column(
+                              children: [
+                                StreamBuilder(
+                                    stream: profileBloc.balanceStream,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData &&
+                                          snapshot.data != null) {
+                                        return Text(
+                                          snapshot.data!
+                                              .toStringAsFixed(2)
+                                              .toString(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineLarge,
+                                        );
+                                      } else {
+                                        return const CircularProgressIndicator();
+                                      }
+                                    })
+                              ],
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                IconButton(
+                                    enableFeedback: false,
+                                    onPressed: () {
+                                      profileBloc.add(ChangeBalance(1, 0));
+                                    },
+                                    icon: const Icon(Icons.add))
+                              ],
+                            ))
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Profile name: ${profile.name}"),
+                        Text("Profile name: ${widget.profile.name}"),
                         //Text("selected profile: ${selectedProfile.name}")
                       ],
                     )

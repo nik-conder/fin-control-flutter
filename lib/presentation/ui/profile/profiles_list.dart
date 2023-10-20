@@ -63,22 +63,12 @@ class _ProfilesListState extends State<ProfilesList> {
                             return ListTile(
                               dense: true,
                               selected: (_selectedProfile == profile),
-                              selectedTileColor: (_selectedProfile == profile)
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color,
-                              selectedColor: (_selectedProfile == profile)
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color,
+                              selectedTileColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              selectedColor: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                               mouseCursor: MouseCursor.uncontrolled,
                               title: Text(profile.name),
                               shape: RoundedRectangleBorder(

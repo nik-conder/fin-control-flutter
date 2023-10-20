@@ -1,6 +1,5 @@
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/models/profile.dart';
-import 'package:fin_control/data/models/session.dart';
 import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/session/session_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';

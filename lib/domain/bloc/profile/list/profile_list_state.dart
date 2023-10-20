@@ -1,19 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:fin_control/data/models/profile.dart';
 
-class ProfileListState extends Equatable {
-  final List<Profile>? profiles;
+abstract class ProfileListState extends Equatable {}
 
-  const ProfileListState({required this.profiles});
-
-  ProfileListState copyWith({
-    List<Profile>? profiles,
-  }) {
-    return ProfileListState(
-      profiles: profiles ?? this.profiles,
-    );
-  }
-
+class ProfileListInitial extends ProfileListState {
   @override
-  List<Object?> get props => [profiles];
+  List<Object?> get props => [];
 }

@@ -1,3 +1,5 @@
+import 'package:fin_control/presentation/ui/components/box_page_component.dart';
+import 'package:fin_control/presentation/ui/components/box_tip_component.dart';
 import 'package:flutter/material.dart';
 
 class HomeContent extends StatelessWidget {
@@ -5,8 +7,22 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Home content'),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [BoxTipComponent()],
+        ),
+        Row(
+          children: [
+            Expanded(
+                child: BoxContentComponent(
+                    paddingContent: EdgeInsets.all(16),
+                    header: "Лента",
+                    content: Text("...")))
+          ],
+        )
+      ],
     );
   }
 }

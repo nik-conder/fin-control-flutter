@@ -23,13 +23,8 @@ class FootComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(24),
-        color: Theme.of(context).colorScheme.inversePrimary,
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            'Created by ${getPlathorm()}',
-          )
-        ]));
+    return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text('Created by ${getPlathorm()}'));
   }
 }

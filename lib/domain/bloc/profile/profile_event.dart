@@ -15,7 +15,6 @@ class CreateProfileEvent extends ProfileEvent {
 
   CreateProfileEvent(this.name, this.currency);
 
-  @override
   List<Object?> get props => [name, currency];
 }
 
@@ -24,13 +23,18 @@ class GetBalanceEvent extends ProfileEvent {
 
   final int id;
 
-  @override
   List<Object?> get props => [id];
 }
 
 class UpdateBalance extends ProfileEvent {
   final int id;
+
+  UpdateBalance(this.id);
+}
+
+class ChangeBalance extends ProfileEvent {
+  final int id;
   final double balance;
 
-  UpdateBalance(this.id, this.balance);
+  ChangeBalance(this.id, this.balance);
 }

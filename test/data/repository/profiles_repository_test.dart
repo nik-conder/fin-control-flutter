@@ -26,9 +26,7 @@ void main() {
       profilesRepository = getIt<ProfilesRepository>();
     });
 
-    tearDownAll(() {
-      getIt.reset();
-    });
+    tearDownAll(() => getIt.reset());
 
     test('Insert Profile', () async {
       final profile = Profile(
@@ -81,9 +79,7 @@ void main() {
 
         debugPrint('Balance: $result');
 
-        result.listen((event) {
-          expect(event, profile1.balance);
-        });
+        expect(profile1.balance, result);
       });
 
       test('Update balance: + 100500', () async {
@@ -94,11 +90,7 @@ void main() {
 
         final getBalance = await profilesRepository.getBalance(1);
 
-        const resultBalance = 100500;
-
-        getBalance.listen((event) {
-          expect(event, resultBalance);
-        });
+        expect(profile1.balance, getBalance);
       });
     });
   });

@@ -7,7 +7,6 @@ import 'package:fin_control/domain/bloc/profile/list/profile_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:stream_bloc/stream_bloc.dart';
 
 class ProfileListBloc extends Bloc<ProfileListEvent, ProfileListState> {
   final ProfilesRepository _profilesRepository =
@@ -18,18 +17,20 @@ class ProfileListBloc extends Bloc<ProfileListEvent, ProfileListState> {
 
   Stream<List<Profile>> get profilesStream => _profilesSubject.stream;
 
-  ProfileListBloc() : super(const ProfileListState(profiles: [])) {
+  ProfileListBloc() : super(ProfileListInitial()) {
     on<UpdateProfilesListEvent>(_updateProfilesList);
   }
 
   void _updateProfilesList(
       UpdateProfilesListEvent event, Emitter<ProfileListState> emit) {
     _profilesRepository.getAllProfiles().listen((profile) {
-      _profilesSubject.add(profile);
+      if (profile.isNotEmpty) {
+        _profilesSubject.add(profile);
+        profilesStream;
+      }
     });
   }
 
-  @override
   void dispose() {
     _profilesSubject.close();
   }

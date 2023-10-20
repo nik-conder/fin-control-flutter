@@ -18,8 +18,8 @@ class SettingsRepository {
     return await settingsDao.updateDarkModeSetting((isDarkMode) ? 1 : 0);
   }
 
-  Stream<bool> getDarkModeSetting() async* {
-    final result = await settingsDao.getDarkModeSetting();
-    yield* result;
+  Future<bool> getDarkModeSetting() async {
+    final result = settingsDao.getDarkModeSetting();
+    return result;
   }
 }

@@ -20,33 +20,31 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc() : super(ProfileInitial()) {
     on<CreateProfileEvent>(_createProfile);
+    on<ChangeBalance>(
+      (event, emit) async {
+        await _changeBalance(event, emit);
+      },
+    );
     on<UpdateBalance>(
       (event, emit) async {
-        _updateBalance(event, emit);
+        await _updateBalance(event, emit);
       },
     );
   }
 
   _updateBalance(UpdateBalance event, Emitter<ProfileState> emit) async {
+    final result = await _profilesRepository.getBalance(event.id);
+    _balanceSubject.add(result);
+  }
+
+  _changeBalance(ChangeBalance event, Emitter<ProfileState> emit) async {
     final random = Random();
     double randomDouble = 100 + random.nextDouble() * (10000 - 100);
     try {
       final result =
           await _profilesRepository.updateBalance(event.id, randomDouble);
-      if (result == 1) {
-        _getBalance(event.id);
-      }
-    } catch (e) {
-      developer.log('', time: DateTime.now(), error: e.toString());
-    }
-  }
 
-  _getBalance(int id) async {
-    try {
-      final balance = await _profilesRepository.getBalance(id);
-      balance.listen((event) {
-        _balanceSubject.add(event);
-      });
+      if (result == 1) add(UpdateBalance(event.id));
     } catch (e) {
       developer.log('', time: DateTime.now(), error: e.toString());
     }

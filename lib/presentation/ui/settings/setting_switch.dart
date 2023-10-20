@@ -29,58 +29,39 @@ class SettingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start, // Выравниваем по левому краю
+    // FIXME: переделать
+    return Expanded(
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: paddingAll,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    softWrap: true,
-                  )
-                ],
-              ),
-            ),
-            if (description != null)
-              Padding(
-                padding: paddingAll,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      // Устанавливаем ограничение на ширину
-                      child: Text(
-                        description!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        softWrap: true, // Разрешаем перенос текста
-                      ),
-                    )
-                  ],
-                ),
-              )
-          ],
-        ),
-        Column(
-          children: [
-            Padding(
-              padding: paddingAll,
-              child: Switch(
-                value: state,
-                onChanged: onClick,
-                thumbIcon: thumbIcon,
-              ),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium,
+              softWrap: true,
             )
           ],
+        ),
+        Row(
+          children: [
+            if (description != null)
+              Text(
+                description!,
+                style: Theme.of(context).textTheme.bodyMedium,
+                softWrap: true,
+              )
+          ],
         )
-      ],
-    );
+      ]),
+      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Switch(
+          value: state,
+          onChanged: onClick,
+          thumbIcon: thumbIcon,
+        ),
+      ])
+    ]));
   }
 }

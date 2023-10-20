@@ -43,11 +43,10 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       await _sessionRepository
           .insertSession(Session(profileId: event.profile.id!));
     } catch (e) {
-      print(e);
+      developer.log('', time: DateTime.now(), error: e.toString());
     }
   }
 
-  @override
   void dispose() {
     sessionStream.close();
     super.close();

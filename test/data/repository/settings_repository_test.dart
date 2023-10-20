@@ -9,10 +9,15 @@ void main() {
 
     late SettingsRepository settingsRepository;
 
-    setUp(() {
+    setUpAll(() {
       DependencyInjector.setup();
+    });
+
+    setUp(() {
       settingsRepository = getIt<SettingsRepository>();
     });
+
+    tearDownAll(() => getIt.reset());
 
     test('Check Auto Insert Setting', () async {
       final insertedRows = await settingsRepository.getSettings();
@@ -28,14 +33,10 @@ void main() {
     });
 
     test('Get option "Dark Mode', () async {
-      final darkModeSetting = await settingsRepository.getDarkModeSetting();
-      darkModeSetting.listen((event) {
-        expect(event, true);
-      });
-    });
-
-    tearDown(() {
-      getIt.reset();
+      final result = settingsRepository.getDarkModeSetting();
+      result.then((value) => {
+            expect(value, true),
+          });
     });
   });
 }

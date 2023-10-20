@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 abstract class DatabaseManager {
@@ -14,6 +13,11 @@ class SQLiteDatabase implements DatabaseManager {
   late String dbPath;
 
   final int version = 1;
+
+  final String nameDB = 'fin_control_app.db';
+
+  final bool memoryDatabasePath =
+      true; // flag to use inMemoryDatabasePath, flags: kDebugMode or true
 
   final String _tableSettings =
       'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)';
@@ -32,12 +36,11 @@ class SQLiteDatabase implements DatabaseManager {
   Future<Database> initializeDB() async {
     sqfliteFfiInit();
 
-// Проверяем текущий режим работы приложения
-    if (kDebugMode) {
-      // Режим отладки: используем inMemoryDatabasePath
+    // If current mode is debug, use inMemoryDatabasePath
+    if (memoryDatabasePath) {
       db = await databaseFactory.openDatabase(inMemoryDatabasePath,
           options: OpenDatabaseOptions(
-            version: 1,
+            version: version,
             onCreate: (db, version) {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
@@ -45,11 +48,10 @@ class SQLiteDatabase implements DatabaseManager {
             },
           ));
     } else {
-      // Режим тестирования: используем временный путь к базе данных
       final dbPath = await databaseFactory.getDatabasesPath();
-      db = await databaseFactory.openDatabase('$dbPath/my_database.db',
+      db = await databaseFactory.openDatabase('$dbPath/$nameDB',
           options: OpenDatabaseOptions(
-            version: 1,
+            version: version,
             onCreate: (db, version) {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
@@ -58,7 +60,12 @@ class SQLiteDatabase implements DatabaseManager {
           ));
     }
 
-    db.rawInsert("INSERT INTO settings (isDarkMode) VALUES (?)", [0]);
+    // chek created settings row
+    final settings = await db.query('settings');
+    if (settings.isEmpty) {
+      db.rawInsert("INSERT INTO settings (isDarkMode) VALUES (?)", [0]);
+    }
+
     return db;
   }
 

@@ -45,7 +45,7 @@ void main() {
     });
 
     test('Get all profiles', () async {
-      final result = await profileDao.getAllProfiles();
+      final result = profileDao.getAllProfiles();
 
       debugPrint('All profiles: $result');
 
@@ -65,23 +65,17 @@ void main() {
 
         debugPrint('Balance: $result');
 
-        result.listen((event) {
-          expect(event, profile1.balance);
-        });
+        expect(result, profile1.balance);
       });
 
       test('Update balance: + 100500', () async {
-        final result = await profileDao.updateBalance(1, 100500);
+        final result = await profileDao.updateBalance(1, profile1.balance);
 
         expect(1, result);
 
         final getBalance = await profileDao.getBalance(1);
 
-        const resultBalance = 100500;
-
-        getBalance.listen((event) {
-          expect(event, resultBalance);
-        });
+        expect(profile1.balance, getBalance);
       });
     });
 

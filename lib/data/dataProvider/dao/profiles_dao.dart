@@ -34,27 +34,25 @@ class ProfilesDAO {
     }
   }
 
-  Stream<double> getBalance(int id) async* {
-    while (true) {
-      try {
-        final database = await databaseManager.initializeDB();
-        final result = await database.query(
-          _columnName,
-          columns: ['balance'],
-          where: 'id = ?',
-          whereArgs: [id],
-        );
+  Future<double> getBalance(int id) async {
+    try {
+      final database = await databaseManager.initializeDB();
+      final result = await database.query(
+        _columnName,
+        columns: ['balance'],
+        where: 'id = ?',
+        whereArgs: [id],
+      );
 
-        if (result.isNotEmpty) {
-          final balance = result.first['balance'] as double;
-          yield balance;
-        } else {
-          yield 0;
-        }
-      } catch (e) {
-        developer.log('Error getting balance: $e', time: DateTime.now());
-        yield 0;
+      if (result.isNotEmpty) {
+        final balance = result.first['balance'] as double;
+        return balance;
+      } else {
+        return 0;
       }
+    } catch (e) {
+      developer.log('Error getting balance: $e', time: DateTime.now());
+      return 0;
     }
   }
 
