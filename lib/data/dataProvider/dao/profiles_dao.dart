@@ -14,7 +14,7 @@ class ProfilesDAO {
     try {
       final database = await databaseManager.initializeDB();
       return await database.rawInsert(
-          'INSERT INTO profiles (id, name, balance, currency) VALUES (?, ?, ?, ?)',
+          'INSERT INTO $_columnName (id, name, balance, currency) VALUES (?, ?, ?, ?)',
           [profile.id, profile.name, profile.balance, profile.currency.name]);
     } catch (e) {
       developer.log('Error inserting rows: $e', time: DateTime.now());

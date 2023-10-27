@@ -11,21 +11,24 @@ import 'package:get_it/get_it.dart';
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
   final _sessionRepository = GetIt.instance<SessionRepository>();
 
-  StreamController<Session> sessionStream = StreamController<Session>();
+  final StreamController<Session> _sessionStream = StreamController<Session>();
 
-  Stream<Session> get session => sessionStream.stream;
+  Stream<Session> get session => _sessionStream.stream;
 
   SessionBloc() : super(SessionInitial()) {
+    on<SessionGetEvent>(_sessionGet);
     on<SessionCreateEvent>(_sessionCreate);
     on<SessionDeleteEvent>(_sessionDelete);
   }
 
-  _sessionGet(SessionLoad event, Emitter<SessionState> emit) async {
+  _sessionGet(SessionGetEvent event, Emitter<SessionState> emit) async {
     try {
-      return await _sessionRepository.getSession();
+      final session = _sessionRepository.getSession();
+      session.then((value) => {
+            if (value != null) _sessionStream.sink.add(value),
+          });
     } catch (e) {
       developer.log('', time: DateTime.now(), error: e.toString());
-      return Session(id: 0, profileId: 0);
     }
   }
 
@@ -42,13 +45,14 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       await _sessionRepository.deleteSessions();
       await _sessionRepository
           .insertSession(Session(profileId: event.profile.id!));
+      add(SessionGetEvent());
     } catch (e) {
       developer.log('', time: DateTime.now(), error: e.toString());
     }
   }
 
   void dispose() {
-    sessionStream.close();
+    _sessionStream.close();
     super.close();
   }
 }

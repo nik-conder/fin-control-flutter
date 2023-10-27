@@ -1,5 +1,6 @@
 import 'package:fin_control/presentation/ui/components/box_page_component.dart';
 import 'package:fin_control/presentation/ui/components/box_tip_component.dart';
+import 'package:fin_control/presentation/ui/components/transactions_list_component.dart';
 import 'package:flutter/material.dart';
 
 class HomeContent extends StatelessWidget {
@@ -7,7 +8,7 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
@@ -19,7 +20,7 @@ class HomeContent extends StatelessWidget {
                 child: BoxContentComponent(
                     paddingContent: EdgeInsets.all(16),
                     header: "Лента",
-                    content: Text("...")))
+                    content: TransactionsListComponent()))
           ],
         )
       ],

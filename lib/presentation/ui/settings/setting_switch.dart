@@ -29,47 +29,49 @@ class SettingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Padding(
+    return Padding(
       padding: paddingAll,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 8,
-                  top: 8,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      softWrap: true,
-                    )
-                  ],
-                ),
+              Row(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(
+                        left: 4,
+                        top: 4,
+                      ),
+                      child: Flexible(
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleSmall,
+                          softWrap: true,
+                        ),
+                      )),
+                ],
               ),
               if (description != null)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8,
-                    top: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        // FIXME: text not wrapped
-                        (description != null) ? description! : '',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        softWrap: true,
-                      )
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(
+                          left: 4,
+                          top: 4,
+                        ),
+                        child: Flexible(
+                          child: Text(
+                            // FIXME: text not wrapped
+                            (description != null) ? description! : '',
+                            style: Theme.of(context).textTheme.bodySmall,
+                            softWrap: true,
+                          ),
+                        )),
+                  ],
                 ),
             ],
           ),
@@ -82,40 +84,6 @@ class SettingSwitch extends StatelessWidget {
           ])
         ],
       ),
-    ));
+    );
   }
 }
-
-/*
-Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
-              softWrap: true,
-            )
-          ],
-        ),
-        Row(
-          children: [
-            if (description != null)
-              Text(
-                description!,
-                style: Theme.of(context).textTheme.bodyMedium,
-                softWrap: true,
-              )
-          ],
-        )
-      ]),
-      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Switch(
-          value: state,
-          onChanged: onClick,
-          thumbIcon: thumbIcon,
-        ),
-      ])
-    ]));
-*/

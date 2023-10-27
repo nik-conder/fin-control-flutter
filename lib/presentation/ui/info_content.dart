@@ -5,15 +5,13 @@ enum InfoPageType { notProfile, loading, noData, hiddenBalance }
 
 class InfoContent extends StatelessWidget {
   final InfoPageType pageType;
-  late EdgeInsetsGeometry padding;
 
-  InfoContent({super.key, required this.pageType}) {
-    padding = const EdgeInsets.all(8);
-  }
+  const InfoContent({super.key, required this.pageType});
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    const EdgeInsetsGeometry padding = EdgeInsets.all(8);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

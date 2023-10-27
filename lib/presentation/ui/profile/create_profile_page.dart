@@ -10,7 +10,7 @@ class CreateProfilePage extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localization.title_new_profile), actions: const []),
+      appBar: AppBar(title: Text(localization.new_profile), actions: const []),
       body: const CreateProfileContent(),
     );
   }

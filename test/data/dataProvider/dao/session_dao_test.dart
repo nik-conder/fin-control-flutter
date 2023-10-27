@@ -27,7 +27,7 @@ void main() {
     test('Insert Session', () async {
       final insertedRows = await sessionDao.insertSession(session1);
 
-      expect(insertedRows, 1);
+      expect(1, insertedRows);
     });
 
     test('Get session', () async {
@@ -36,8 +36,8 @@ void main() {
       expect(result, isA<Session>());
 
       if (result != null) {
-        expect(result.id, session1.id);
-        expect(result.profileId, session1.profileId);
+        expect(session1.id, result.id);
+        expect(session1.profileId, result.profileId);
       } else {
         fail('Session is null');
       }

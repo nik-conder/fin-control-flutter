@@ -4,8 +4,6 @@ import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 
-import 'package:rxdart/rxdart.dart';
-
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final SettingsRepository _settingsRepository;
 

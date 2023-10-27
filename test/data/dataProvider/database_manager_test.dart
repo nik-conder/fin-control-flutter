@@ -61,5 +61,48 @@ void main() {
         }
       });
     });
+
+    group('Table Sessions', () {
+      test('Check tables "sessions"', () async {
+        final db = await database.initializeDB();
+        final tables = await db.query("sqlite_master",
+            where: "type = 'table' AND name = 'sessions'");
+        expect(tables.isNotEmpty, true);
+      });
+
+      test('Check columns "sessions"', () async {
+        final db = await database.initializeDB();
+        final result = await db.query('sessions');
+        if (result.isNotEmpty) {
+          final columnNames = result[0].keys.toList();
+          expect(columnNames.contains('id'), true);
+          expect(columnNames.contains('profileId'), true);
+        }
+      });
+    });
+
+    group('Table Transactions', () {
+      test('Check tables "transactions"', () async {
+        final db = await database.initializeDB();
+        final tables = await db.query("sqlite_master",
+            where: "type = 'table' AND name = 'transactions'");
+        expect(tables.isNotEmpty, true);
+      });
+
+      test('Check columns "transactions"', () async {
+        final db = await database.initializeDB();
+        final result = await db.query('transactions');
+        if (result.isNotEmpty) {
+          final columnNames = result[0].keys.toList();
+          expect(columnNames.contains('id'), true);
+          expect(columnNames.contains('profileId'), true);
+          expect(columnNames.contains('type'), true);
+          expect(columnNames.contains('amount'), true);
+          expect(columnNames.contains('datetime'), true);
+          expect(columnNames.contains('category'), true);
+          expect(columnNames.contains('note'), true);
+        }
+      });
+    });
   });
 }

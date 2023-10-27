@@ -1,11 +1,11 @@
 import 'package:fin_control/config.dart';
 import 'package:fin_control/dependency_injector.dart';
-import 'package:fin_control/domain/bloc/profile/list/profile_list_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
+import 'package:fin_control/domain/bloc/transactions/transactions_bloc.dart';
 import 'package:fin_control/presentation/ui/home/home_page.dart';
 import 'package:fin_control/presentation/ui/login/login_page.dart';
 import 'package:fin_control/presentation/ui/profile/create_profile_page.dart';
@@ -40,15 +40,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final sessionBloc = GetIt.instance<SessionBloc>();
-    final profilesListBloc = GetIt.instance<ProfileListBloc>();
     final profileBloc = GetIt.instance<ProfileBloc>();
+    final transactionsBloc = GetIt.instance<TransactionsBloc>();
 
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => themeBloc),
           BlocProvider(create: (context) => sessionBloc),
-          BlocProvider(create: (context) => profilesListBloc),
           BlocProvider(create: (context) => profileBloc),
+          BlocProvider(create: (context) => transactionsBloc),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return MaterialApp(

@@ -12,8 +12,9 @@ void main() {
 
     late SettingsDao settingsDao;
 
+    setUpAll(() => DependencyInjector.setup());
+
     setUp(() {
-      DependencyInjector.setup();
       settingsDao = getIt<SettingsDao>();
     });
 
@@ -42,12 +43,12 @@ void main() {
         final result = settingsDao.getDarkModeSetting();
 
         result.then((value) => {
-              expect(1, value),
+              expect(true, value),
             });
       });
     });
 
-    tearDown(() {
+    tearDownAll(() {
       getIt.reset();
     });
   });

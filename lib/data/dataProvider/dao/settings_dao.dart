@@ -13,7 +13,7 @@ class SettingsDao {
 
     try {
       final result = await database.rawInsert(
-          'INSERT INTO settings (id, isDarkMode) VALUES (?, ?)',
+          'INSERT INTO $_columnName (id, isDarkMode) VALUES (?, ?)',
           [settings.id, settings.isDarkMode]);
       developer.log('Inserted Rows: $result', time: DateTime.now());
 

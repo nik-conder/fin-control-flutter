@@ -1,4 +1,5 @@
 import 'package:fin_control/data/repository/settings_repository.dart';
+import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
@@ -24,38 +25,122 @@ class SettingsContent extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => SettingsBloc(settingsRepository)),
         ],
-        child: BoxContentComponent(
-            paddingContent: const EdgeInsets.all(4),
-            header: localization.title_settings,
-            content: Column(
-              children: [
-                Row(
+        child: Column(children: [
+          BoxContentComponent(
+              paddingContent: const EdgeInsets.all(4),
+              header: localization.profile,
+              content: BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                return Column(
                   children: [
-                    BlocBuilder<ThemeBloc, ThemeState>(
-                        builder: (context, state) {
-                      return SettingSwitch(
-                        state: state.isDarkMode,
-                        title: localization.dark_mode,
-                        onClick: (newValue) => {
-                          BlocProvider.of<ThemeBloc>(context)
-                              .add(UpdateThemeEvent()),
-                        },
-                      );
-                    }),
+                    Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            "\uD83D\uDC64",
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                        Text("Profile name",
+                            style: Theme.of(context).textTheme.titleMedium),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 4, right: 8, bottom: 4),
+                                  child: Text("EUR",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
+                                )),
+                          ),
+                        )
+                      ],
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12, bottom: 12, right: 12),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/login');
+                                  },
+                                  child: Text(localization.logout)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: TextButton(
+                                  onPressed: null,
+                                  child: Text(localization.delete)),
+                            ),
+                          ],
+                        )),
                   ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SettingSwitch(
-                      state: false,
-                      title: 'Test title option',
-                      description: 'test description option',
-                      onClick: (newValue) => {},
-                    )
-                  ],
-                )
-              ],
-            )));
+                );
+              })),
+          BoxContentComponent(
+              paddingContent: const EdgeInsets.all(4),
+              header: localization.settings,
+              content: Column(
+                children: [
+                  BlocBuilder<SettingsBloc, SettingsState>(
+                      builder: (context, state) {
+                    return Column(
+                      children: [
+                        BlocBuilder<ThemeBloc, ThemeState>(
+                            // TODO join bloc to SettingsBloc
+                            builder: (context, state) {
+                          return SettingSwitch(
+                            state: state.isDarkMode,
+                            title: localization.dark_mode,
+                            onClick: (newValue) => {
+                              BlocProvider.of<ThemeBloc>(context)
+                                  .add(UpdateThemeEvent()),
+                            },
+                          );
+                        }),
+                        SettingSwitch(
+                          state: false,
+                          title: localization.block_useful_tips_setting,
+                          description: localization
+                              .block_useful_tips_setting_description,
+                          onClick: (newValue) => {},
+                        ),
+                        SettingSwitch(
+                          state: false,
+                          title: localization.hidden_balance,
+                          description: localization.hide_balance_description,
+                          onClick: (newValue) => {},
+                        ),
+                        SettingSwitch(
+                          state: false,
+                          title: 'Debug mode',
+                          description: 'Option for development',
+                          onClick: (newValue) => {},
+                        ),
+                        SettingSwitch(
+                          state: false, // TODO: default value is true
+                          title: localization.transaction_grid,
+                          description:
+                              localization.transaction_grid_description,
+                          onClick: (newValue) => {},
+                        )
+                      ],
+                    );
+                  }),
+                ],
+              ))
+        ]));
   }
 }

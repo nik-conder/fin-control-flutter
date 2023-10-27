@@ -112,7 +112,8 @@ class _HomeHeadState extends State<HomeHead> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Profile name: ${widget.profile.name}"),
+                        Text(
+                            "Profile name: ${widget.profile.name}"), // TODO translate
                         //Text("selected profile: ${selectedProfile.name}")
                       ],
                     )

@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
     final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localization.title_login), actions: [
+      appBar: AppBar(title: Text(localization.login), actions: [
         BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return Tooltip(
               message: (state.isDarkMode)

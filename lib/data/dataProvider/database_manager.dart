@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'dart:io' show Platform;
 
 abstract class DatabaseManager {
   Future<Database> initializeDB();
@@ -13,12 +14,9 @@ class SQLiteDatabase implements DatabaseManager {
 
   late String dbPath;
 
-  final int version = 1;
+  final int version = 2;
 
   final String nameDB = 'fin_control_app.db';
-
-  final bool memoryDatabasePath =
-      false; // flag to use inMemoryDatabasePath, flags: kDebugMode or true
 
   final String _tableSettings =
       'CREATE TABLE IF NOT EXISTS settings(id INTEGER PRIMARY KEY AUTOINCREMENT, isDarkMode INTEGER NOT NULL)';
@@ -29,13 +27,21 @@ class SQLiteDatabase implements DatabaseManager {
   final String _tableSessions =
       'CREATE TABLE IF NOT EXISTS sessions(id INTEGER PRIMARY KEY AUTOINCREMENT, profileId INTEGER NOT NULL)';
 
+  final String _tableTransactions =
+      'CREATE TABLE transactions (id INTEGER PRIMARY KEY AUTOINCREMENT,profileId INTEGER,type TEXT,amount NUMERIC,datetime TEXT,category TEXT,note TEXT)';
+
   SQLiteDatabase() : super() {
     databaseFactory = databaseFactoryFfi;
   }
 
   @override
   Future<Database> initializeDB() async {
-    sqfliteFfiInit();
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+    }
+
+    dbPath = await _getDBPath();
 
     // If current mode is debug, use inMemoryDatabasePath
     if (kDebugMode) {
@@ -46,10 +52,10 @@ class SQLiteDatabase implements DatabaseManager {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
               db.execute(_tableSessions);
+              db.execute(_tableTransactions);
             },
           ));
     } else {
-      final dbPath = await databaseFactory.getDatabasesPath();
       db = await databaseFactory.openDatabase('$dbPath/$nameDB',
           options: OpenDatabaseOptions(
             version: version,
@@ -57,6 +63,7 @@ class SQLiteDatabase implements DatabaseManager {
               db.execute(_tableSettings);
               db.execute(_tableProfiles);
               db.execute(_tableSessions);
+              db.execute(_tableTransactions);
             },
           ));
     }
@@ -68,6 +75,14 @@ class SQLiteDatabase implements DatabaseManager {
     }
 
     return db;
+  }
+
+  Future<String> _getDBPath() async {
+    if (Platform.isWindows || Platform.isLinux) {
+      return await databaseFactory.getDatabasesPath();
+    } else {
+      return await getDatabasesPath();
+    }
   }
 
   @override

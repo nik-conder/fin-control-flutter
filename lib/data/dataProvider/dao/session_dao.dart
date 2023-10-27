@@ -10,11 +10,10 @@ class SessionDao {
   SessionDao(this.databaseManager);
 
   Future<int> insertSession(Session session) async {
-    final database = await databaseManager.initializeDB();
-
     try {
+      final database = await databaseManager.initializeDB();
       final result = await database.rawInsert(
-          'INSERT INTO sessions (id, profileId) VALUES (?, ?)',
+          'INSERT INTO $_columnName (id, profileId) VALUES (?, ?)',
           [session.id, session.profileId]);
       developer.log('Inserted Rows: $result', time: DateTime.now());
       return result;
@@ -25,9 +24,8 @@ class SessionDao {
   }
 
   Future<Session?> getSession() async {
-    final database = await databaseManager.initializeDB();
-
     try {
+      final database = await databaseManager.initializeDB();
       final result =
           await database.query(_columnName, columns: ['id', 'profileId']);
       final session = Session.fromMap(result.first);

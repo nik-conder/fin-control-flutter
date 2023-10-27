@@ -1,6 +1,6 @@
 part of 'profile_bloc.dart';
 
-abstract class ProfileState extends Equatable {
+class ProfileState extends Equatable {
   const ProfileState();
 
   @override
@@ -46,7 +46,7 @@ class ProfileError extends ProfileState {
 class CreateProfileSuccess extends ProfileState {}
 
 class CreateProfileError extends ProfileState {
-  final String message;
+  final ProfileNameMsg message;
 
   const CreateProfileError(this.message);
 

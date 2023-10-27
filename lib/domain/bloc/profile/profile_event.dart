@@ -18,6 +18,8 @@ class CreateProfileEvent extends ProfileEvent {
   List<Object?> get props => [name, currency];
 }
 
+class CreateDemoProfileEvent extends ProfileEvent {}
+
 class GetBalanceEvent extends ProfileEvent {
   GetBalanceEvent(this.id);
 
@@ -38,3 +40,5 @@ class ChangeBalance extends ProfileEvent {
 
   ChangeBalance(this.id, this.balance);
 }
+
+class UpdateProfilesListEvent extends ProfileEvent {}
