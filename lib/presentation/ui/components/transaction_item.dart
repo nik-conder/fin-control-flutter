@@ -1,7 +1,8 @@
 import 'package:fin_control/data/models/transaction.dart';
-import 'package:fin_control/presentation/utils/date_formater.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../utils/utils.dart';
 
 class TransactionItem extends StatefulWidget {
   final FinTransaction transaction;
@@ -55,7 +56,7 @@ class _TransactionItemState extends State<TransactionItem> {
                               ],
                             ),
                             onTap: () {
-                              // Обработка нажатия на Action 1
+                              // TODO
                             },
                           ),
                           ListTile(
@@ -67,7 +68,7 @@ class _TransactionItemState extends State<TransactionItem> {
                               Text(localization.delete)
                             ]),
                             onTap: () {
-                              // Обработка нажатия на Action 1
+                              // TODO
                             },
                           ),
                         ],
