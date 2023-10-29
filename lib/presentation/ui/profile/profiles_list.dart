@@ -38,10 +38,11 @@ class _ProfilesListState extends State<ProfilesList> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       children: [
-        Row(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           StreamBuilder(
             stream:
                 _profileListBloc.profilesStream, // FIXME: not auto refreshing
@@ -66,18 +67,18 @@ class _ProfilesListState extends State<ProfilesList> {
                       final profile = snapshot.data![index];
 
                       return ListTile(
-                        dense: true,
+                        isThreeLine: true,
+                        key: ValueKey(profile.id),
+                        //dense: true,
                         selected: (_selectedProfile == profile),
-                        selectedTileColor:
-                            Theme.of(context).colorScheme.primaryContainer,
-                        selectedColor:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
+                        selectedTileColor: colorScheme.primaryContainer,
+                        selectedColor: colorScheme.onPrimaryContainer,
                         mouseCursor: MouseCursor.uncontrolled,
                         title: Text(profile.name),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                        titleTextStyle: Theme.of(context).textTheme.titleMedium,
                         visualDensity: VisualDensity.standard,
                         onTap: () {
                           setState(() {
@@ -86,7 +87,6 @@ class _ProfilesListState extends State<ProfilesList> {
                         },
                         subtitle: Text(profile.currency.name),
                         trailing: IconButton(
-                          color: Theme.of(context).textTheme.bodyMedium?.color,
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 showCloseIcon: true,
@@ -99,7 +99,7 @@ class _ProfilesListState extends State<ProfilesList> {
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                        const Padding(padding: EdgeInsets.all(8)),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
                   ),
                 );
               } else if (snapshot.hasError) {

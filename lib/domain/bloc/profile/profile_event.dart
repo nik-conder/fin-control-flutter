@@ -28,11 +28,7 @@ class GetBalanceEvent extends ProfileEvent {
   List<Object?> get props => [id];
 }
 
-class UpdateBalance extends ProfileEvent {
-  final int id;
-
-  UpdateBalance(this.id);
-}
+class UpdateBalance extends ProfileEvent {}
 
 class ChangeBalance extends ProfileEvent {
   final int id;

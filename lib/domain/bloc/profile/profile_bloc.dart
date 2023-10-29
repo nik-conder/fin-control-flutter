@@ -59,7 +59,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   _updateBalance(UpdateBalance event, Emitter<ProfileState> emit) async {
-    final result = await _profilesRepository.getBalance(event.id);
+    final result = await _profilesRepository.getBalance(1); // FIXME
     _balanceSubject.add(result);
   }
 
@@ -70,7 +70,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final result =
           await _profilesRepository.updateBalance(event.id, randomDouble);
 
-      if (result == 1) add(UpdateBalance(event.id));
+      if (result == 1) add(UpdateBalance());
     } catch (e) {
       developer.log('', time: DateTime.now(), error: e.toString());
     }

@@ -60,7 +60,7 @@ class _BoxTipComponentState extends State<BoxTipComponent> {
     return Expanded(
       child: BoxContentComponent(
           paddingContent: const EdgeInsets.all(16),
-          header: "Полезные советы",
+          header: localization.useful_tips,
           icon: const Icon(Icons.info_outline),
           content: Column(
             children: [

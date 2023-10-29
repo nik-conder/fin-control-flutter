@@ -33,11 +33,6 @@ class _TransactionsListComponentState extends State<TransactionsListComponent> {
     });
 
     _coutListUpdate();
-    // _transactionsBloc.transactionsStream.listen((event) {
-    //   if (event.length < _pageSize) {
-    //     _pagingController.appendLastPage(event);
-    //   }
-    // });
   }
 
   _coutListUpdate() {
@@ -122,22 +117,3 @@ class _TransactionsListComponentState extends State<TransactionsListComponent> {
     );
   }
 }
-
-/*
-SizedBox(
-          height: 400,
-          child: PagedListView<int, FinTransaction>.separated(
-            pagingController: _pagingController,
-            separatorBuilder: (context, index) {
-              return const Padding(padding: EdgeInsets.only(top: 12));
-            },
-            scrollController: _scrollControllerList,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(4),
-            builderDelegate: PagedChildBuilderDelegate<FinTransaction>(
-              itemBuilder: (context, item, index) =>
-                  TransactionItem(transaction: item),
-            ),
-          ),
-        )
-        */
