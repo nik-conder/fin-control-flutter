@@ -49,5 +49,6 @@
   "select_action": "Select an action",
   "select_profile": "Select an profile",
   "edit": "Edit",
-  "transaction_successfully_deleted": "Transaction successfully deleted"
+  "transaction_successfully_deleted": "Transaction successfully deleted",
+  "transaction_successfully_added": "Transaction successfully added"
 }

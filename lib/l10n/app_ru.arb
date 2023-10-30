@@ -49,5 +49,6 @@
   "select_action": "Выберите действие",
   "select_profile": "Выберите профиль",
   "edit": "Редактировать",
-  "transaction_successfully_deleted": "Транзакция успешно удалена"
+  "transaction_successfully_deleted": "Транзакция успешно удалена",
+  "transaction_successfully_added": "Транзакция успешно добавлена"
 }

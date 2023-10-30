@@ -71,6 +71,17 @@ class _TransactionsListComponentState extends State<TransactionsListComponent> {
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 content: Text(localizations.transaction_successfully_deleted),
               ));
+            } else if (state is TransactionAddSuccessState) {
+              _pagingController.refresh();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                content: Text(localizations.transaction_successfully_added),
+              ));
+            } else if (state is TransactionAddErrorState) {
+              _pagingController.refresh();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  content: Text(localizations.error)));
             }
           },
           builder: (context, state) => SizedBox(

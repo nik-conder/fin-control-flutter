@@ -20,7 +20,7 @@ class BoxContentComponent extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.95,
+      width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
           Padding(

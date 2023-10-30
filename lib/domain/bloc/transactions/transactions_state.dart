@@ -24,6 +24,14 @@ class TransactionsLoadedState extends TransactionsState {
   const TransactionsLoadedState({super.itemList, super.nextPageKey});
 }
 
+class TransactionAddErrorState extends TransactionsState {
+  const TransactionAddErrorState({super.error});
+}
+
+class TransactionAddSuccessState extends TransactionsState {
+  const TransactionAddSuccessState({super.itemList, super.nextPageKey});
+}
+
 class TransactionDeleteErrorState extends TransactionsState {
   const TransactionDeleteErrorState({super.error});
 }

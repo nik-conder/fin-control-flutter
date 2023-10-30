@@ -26,6 +26,7 @@ class _TransactionItemState extends State<TransactionItem> {
     final localization = AppLocalizations.of(context)!;
 
     return InkWell(
+      radius: 20,
       onLongPress: () {
         Scaffold.of(context).showBottomSheet(
             elevation: 0,
@@ -97,7 +98,7 @@ class _TransactionItemState extends State<TransactionItem> {
         clipBehavior: Clip.hardEdge,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: (transaction.type == TransactionType.income)
                   ? colorScheme.primary
@@ -106,27 +107,29 @@ class _TransactionItemState extends State<TransactionItem> {
             ),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8, left: 12, right: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            transaction.amount.toStringAsFixed(3),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color:
-                                  (transaction.type == TransactionType.income)
-                                      ? colorScheme.primary
-                                      : colorScheme.error,
-                            ),
+                    Flexible(
+                      child: Column(children: [
+                        Text(
+                          transaction.amount.toStringAsFixed(3),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: (transaction.type == TransactionType.income)
+                                ? colorScheme.primary
+                                : colorScheme.error,
                           ),
-                        ]),
+                        ),
+                      ]),
+                    ),
                     Column(
                       children: [
                         Container(
@@ -167,14 +170,15 @@ class _TransactionItemState extends State<TransactionItem> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [Text('#${transaction.id}')],
                     ),
-                    Column(
+                    Flexible(
+                        child: Column(
                       children: [
                         Text(
                           Utils.getFormattedDate(transaction.datetime),
                           style: TextStyle(color: colorScheme.onBackground),
                         ),
                       ],
-                    )
+                    ))
                   ],
                 ),
               ),

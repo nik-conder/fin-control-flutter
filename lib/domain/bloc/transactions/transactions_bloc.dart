@@ -38,9 +38,13 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         await _transactionsRepository.insertTransaction(event.transaction);
 
     final getTrans = await _transactionsRepository.getTransaction(result);
-    if (getTrans == null) return;
 
-    _transactionsSubject.sink.add([getTrans]);
+    if (getTrans != null) {
+      emit(const TransactionAddSuccessState());
+      _transactionsSubject.sink.add([getTrans]);
+    } else {
+      emit(const TransactionAddErrorState());
+    }
 
     dev.log("addTransaction", name: "TransactionsBloc");
   }
