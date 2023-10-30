@@ -47,5 +47,7 @@
   "longProfileName": "Название профиля не может быть длинным",
   "errorCreateProfile": "При создании профиля произошла ошибка",
   "select_action": "Выберите действие",
-  "edit": "Редактировать"
+  "select_profile": "Выберите профиль",
+  "edit": "Редактировать",
+  "transaction_successfully_deleted": "Транзакция успешно удалена"
 }

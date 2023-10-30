@@ -1,5 +1,8 @@
 import 'package:fin_control/data/models/transaction.dart';
+import 'package:fin_control/domain/bloc/transactions/transactions_bloc.dart';
+import 'package:fin_control/domain/bloc/transactions/transactions_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../utils/utils.dart';
@@ -17,73 +20,78 @@ class TransactionItem extends StatefulWidget {
 class _TransactionItemState extends State<TransactionItem> {
   @override
   Widget build(BuildContext context) {
-    final _colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final transaction = widget.transaction;
     final localization = AppLocalizations.of(context)!;
 
     return InkWell(
       onLongPress: () {
-        Scaffold.of(context).showBottomSheet((context) => Container(
-            padding: const EdgeInsets.all(36),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Text(
-                      localization.select_action,
-                      style: Theme.of(context).textTheme.titleMedium,
+        Scaffold.of(context).showBottomSheet(
+            elevation: 0,
+            (context) => Container(
+                padding: const EdgeInsets.all(36),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Text(
+                          localization.select_action,
+                          style: textTheme.titleMedium,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                constraints: const BoxConstraints(maxHeight: 150),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          ListTile(
-                            title: Row(
-                              children: [
-                                const Padding(
-                                    padding: EdgeInsets.only(right: 8),
-                                    child: Icon(Icons.edit)),
-                                Text(localization.edit)
-                              ],
-                            ),
-                            onTap: () {
-                              // TODO
-                            },
+                  ),
+                  Container(
+                    constraints: const BoxConstraints(maxHeight: 150),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              ListTile(
+                                title: Row(
+                                  children: [
+                                    const Padding(
+                                        padding: EdgeInsets.only(right: 8),
+                                        child: Icon(Icons.edit)),
+                                    Text(localization.edit)
+                                  ],
+                                ),
+                                onTap: () {
+                                  // TODO
+                                },
+                              ),
+                              ListTile(
+                                textColor: colorScheme.error,
+                                title: Row(children: [
+                                  const Padding(
+                                      padding: EdgeInsets.only(right: 8),
+                                      child: Icon(Icons.delete)),
+                                  Text(localization.delete)
+                                ]),
+                                onTap: () {
+                                  BlocProvider.of<TransactionsBloc>(context)
+                                      .add(TransactionDeleteEvent(transaction));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
                           ),
-                          ListTile(
-                            textColor: _colorScheme.error,
-                            title: Row(children: [
-                              const Padding(
-                                  padding: EdgeInsets.only(right: 8),
-                                  child: Icon(Icons.delete)),
-                              Text(localization.delete)
-                            ]),
-                            onTap: () {
-                              // TODO
-                            },
-                          ),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(Icons.close)),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(Icons.close)),
-                    ),
-                  ],
-                ),
-              )
-            ])));
+                  )
+                ])));
       },
       child: ClipRRect(
         clipBehavior: Clip.hardEdge,
@@ -92,8 +100,8 @@ class _TransactionItemState extends State<TransactionItem> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: (transaction.type == TransactionType.income)
-                  ? _colorScheme.primary
-                  : _colorScheme.error,
+                  ? colorScheme.primary
+                  : colorScheme.error,
               width: 2,
             ),
           ),
@@ -114,8 +122,8 @@ class _TransactionItemState extends State<TransactionItem> {
                               fontSize: 20,
                               color:
                                   (transaction.type == TransactionType.income)
-                                      ? _colorScheme.primary
-                                      : _colorScheme.error,
+                                      ? colorScheme.primary
+                                      : colorScheme.error,
                             ),
                           ),
                         ]),
@@ -126,13 +134,13 @@ class _TransactionItemState extends State<TransactionItem> {
                               left: 8, top: 4, right: 8, bottom: 4),
                           decoration: BoxDecoration(
                             color: (transaction.type == TransactionType.income)
-                                ? _colorScheme.primary
-                                : _colorScheme.error,
+                                ? colorScheme.primary
+                                : colorScheme.error,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(transaction.category.toString(),
                               style: TextStyle(
-                                color: _colorScheme.onPrimary,
+                                color: colorScheme.onPrimary,
                               )),
                         )
                       ],
@@ -163,7 +171,7 @@ class _TransactionItemState extends State<TransactionItem> {
                       children: [
                         Text(
                           Utils.getFormattedDate(transaction.datetime),
-                          style: TextStyle(color: _colorScheme.onBackground),
+                          style: TextStyle(color: colorScheme.onBackground),
                         ),
                       ],
                     )

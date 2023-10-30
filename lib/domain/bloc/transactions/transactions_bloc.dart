@@ -22,6 +22,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   TransactionsBloc(this._transactionsRepository)
       : super(const TransactionsState()) {
     on<TransactionAddEvent>(_addTransaction);
+    on<TransactionDeleteEvent>(_deleteTransaction);
   }
 
   Future<List<FinTransaction>> fetchPage(int pageKey, int pageSize) async {
@@ -44,5 +45,20 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     dev.log("addTransaction", name: "TransactionsBloc");
   }
 
-  void dispose() {}
+  _deleteTransaction(
+      TransactionDeleteEvent event, Emitter<TransactionsState> emit) async {
+    final result =
+        await _transactionsRepository.deleteTransaction(event.transaction);
+    if (result == 1) {
+      emit(const TransactionDeleteSuccessState());
+      dev.log("deleteTransaction", name: "TransactionsBloc");
+    } else {
+      emit(const TransactionDeleteErrorState());
+      dev.log("deleteTransaction", name: "TransactionsBloc", error: "Error");
+    }
+  }
+
+  void dispose() {
+    _transactionsSubject.close();
+  }
 }

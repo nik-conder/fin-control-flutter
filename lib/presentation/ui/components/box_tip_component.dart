@@ -50,6 +50,8 @@ class _BoxTipComponentState extends State<BoxTipComponent> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
+
     tips = {
       localization.advice_title_1: localization.advice_description_1,
       localization.advice_title_2: localization.advice_description_2,
@@ -70,7 +72,7 @@ class _BoxTipComponentState extends State<BoxTipComponent> {
                   children: [
                     Expanded(
                         child: Text(tips.keys.elementAt(currentTip),
-                            style: Theme.of(context).textTheme.titleMedium))
+                            style: textTheme.titleMedium))
                   ],
                 ),
               ),
@@ -79,7 +81,7 @@ class _BoxTipComponentState extends State<BoxTipComponent> {
                   Expanded(
                       child: Text(
                     tips.values.elementAt(currentTip),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: textTheme.bodyMedium,
                   ))
                 ],
               )

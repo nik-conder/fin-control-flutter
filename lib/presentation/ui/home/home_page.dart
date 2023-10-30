@@ -1,4 +1,3 @@
-import 'package:decimal/decimal.dart';
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/models/transaction.dart';
@@ -8,10 +7,10 @@ import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/domain/bloc/transactions/transactions_bloc.dart';
-import 'package:fin_control/domain/bloc/transactions/transactions_event.dart';
 import 'package:fin_control/presentation/ui/home/home_content.dart';
 import 'package:fin_control/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,15 +23,216 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
+
+  late TransactionType currentType;
+
+  final _controllerNote = TextEditingController();
+  final _controllerAmount = TextEditingController();
+
   bool _showWidgetInAppBar = false;
+
   @override
   void initState() {
-    super.initState();
+    currentType = TransactionType.expense;
     _scrollController.addListener(() {
       setState(() {
         _showWidgetInAppBar = _scrollController.position.pixels > 100;
       });
     });
+    super.initState();
+  }
+
+  Future<void> _showMyDialog() async {
+    final localization = AppLocalizations.of(context)!;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return Dialog.fullscreen(
+          child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              title: const Text('AlertDialog Title'),
+            ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Тип транзакции",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ]),
+                      Row(
+                        children: [
+                          SegmentedButton(
+                              segments: const <ButtonSegment<TransactionType>>[
+                                ButtonSegment<TransactionType>(
+                                    value: TransactionType.expense,
+                                    label: Text('Expense')),
+                                ButtonSegment<TransactionType>(
+                                    value: TransactionType.income,
+                                    label: Text('Income')),
+                              ],
+                              selected: <TransactionType>{
+                                currentType
+                              },
+                              onSelectionChanged:
+                                  (Set<TransactionType> newSelection) {
+                                currentType = newSelection.first;
+                                setState(() {
+                                  currentType = newSelection.first;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(
+                  indent: 8,
+                  endIndent: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Категория",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              "Укажите категорию",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            )
+                          ]),
+                      const Row(
+                        children: [],
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(
+                  indent: 8,
+                  endIndent: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _controllerAmount.text = value;
+                            });
+                          },
+                          controller: _controllerAmount,
+                          decoration: InputDecoration(
+                            hintMaxLines: 1,
+                            labelText: "Сумма",
+                            helperText: "Укажите сумму",
+                            border: const OutlineInputBorder(),
+                            suffixIcon: (_controllerAmount.text.isNotEmpty)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: IconButton(
+                                        icon: const Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            _controllerAmount.clear();
+                                          });
+                                        }))
+                                : null,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(
+                  indent: 8,
+                  endIndent: 8,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              _controllerNote.text = value;
+                            });
+                          },
+                          controller: _controllerNote,
+                          decoration: InputDecoration(
+                            labelText: "Заметка",
+                            helperText: "...",
+                            border: const OutlineInputBorder(),
+                            suffixIcon: (_controllerNote.text.isNotEmpty)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: IconButton(
+                                        icon: const Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            _controllerNote.clear();
+                                          });
+                                        }))
+                                : null,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(localization.next),
+                        )
+                      ],
+                    ))
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -118,36 +318,39 @@ class _HomePageState extends State<HomePage> {
                 }),
                 actions: [
                   Tooltip(
-                      message: (state.isDarkMode)
-                          ? localization.light_mode
-                          : localization.dark_mode,
-                      child: IconButton(
-                        onPressed: () {
-                          themeBloc.add(UpdateThemeEvent());
-                        },
-                        icon: (state.isDarkMode)
-                            ? const Icon(Icons.light_mode_outlined)
-                            : const Icon(Icons.dark_mode_outlined),
-                      )),
+                    message: (state.isDarkMode)
+                        ? localization.light_mode
+                        : localization.dark_mode,
+                    child: IconButton(
+                      onPressed: () {
+                        themeBloc.add(UpdateThemeEvent());
+                      },
+                      icon: (state.isDarkMode)
+                          ? const Icon(Icons.light_mode_outlined)
+                          : const Icon(Icons.dark_mode_outlined),
+                    ),
+                  ),
                   Tooltip(
                     message: localization.settings,
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/settings');
+                        Navigator.pushNamed(context, '/settings',
+                            arguments: {'profile': profile});
                       },
                       icon: const Icon(Icons.settings_outlined),
                     ),
                   ),
                   Tooltip(
-                      message: localization.logout,
-                      child: IconButton(
-                        onPressed: () {
-                          //Navigator.pushReplacementNamed(context, '/login');
-                          sessionBloc.add(SessionDeleteEvent());
-                          Navigator.popAndPushNamed(context, '/login');
-                        },
-                        icon: const Icon(Icons.logout_outlined),
-                      )),
+                    message: localization.logout,
+                    child: IconButton(
+                      onPressed: () {
+                        //Navigator.pushReplacementNamed(context, '/login');
+                        sessionBloc.add(SessionDeleteEvent());
+                        Navigator.popAndPushNamed(context, '/login');
+                      },
+                      icon: const Icon(Icons.logout_outlined),
+                    ),
+                  ),
                 ],
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               ),
@@ -172,13 +375,14 @@ class _HomePageState extends State<HomePage> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              transactionsBloc.add(TransactionAddEvent(FinTransaction(
-                profileId: 1,
-                datetime: DateTime.now(),
-                amount: Decimal.parse('123'),
-                type: TransactionType.income,
-                category: 'category',
-              )));
+              _showMyDialog();
+              // transactionsBloc.add(TransactionAddEvent(FinTransaction(
+              //   profileId: 1,
+              //   datetime: DateTime.now(),
+              //   amount: Decimal.parse('123'),
+              //   type: TransactionType.income,
+              //   category: 'category',
+              // )));
             },
             child: const Icon(Icons.add),
           ),

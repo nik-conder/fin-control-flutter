@@ -47,5 +47,7 @@
   "longProfileName": "The profile name cannot be long",
   "errorCreateProfile": "Error profile create",
   "select_action": "Select an action",
-  "edit": "Edit"
+  "select_profile": "Select an profile",
+  "edit": "Edit",
+  "transaction_successfully_deleted": "Transaction successfully deleted"
 }

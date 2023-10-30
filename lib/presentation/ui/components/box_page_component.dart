@@ -16,6 +16,9 @@ class BoxContentComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.95,
       child: Column(
@@ -31,7 +34,7 @@ class BoxContentComponent extends StatelessWidget {
                   Expanded(
                       child: Text(
                     header,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: textTheme.titleLarge,
                   ))
                 ],
               )),
@@ -43,9 +46,7 @@ class BoxContentComponent extends StatelessWidget {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Container(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
+                              color: colorScheme.secondaryContainer,
                               child: Padding(
                                   padding: paddingContent, child: content))))
                 ],

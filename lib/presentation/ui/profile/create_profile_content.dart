@@ -20,16 +20,19 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
   final _controller = TextEditingController();
 
   late ProfileBloc _profileBloc;
+  final bool clearText = false;
 
   @override
   void initState() {
+    _profileBloc = BlocProvider.of<ProfileBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _profileBloc = BlocProvider.of<ProfileBloc>(context);
     final localization = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
@@ -42,14 +45,14 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: colorScheme.primary,
               content: Text(localization.created_profile),
             ),
           );
         } else if (state is CreateProfileError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Theme.of(context).colorScheme.error,
+              backgroundColor: colorScheme.error,
               content: () {
                 switch (state.message) {
                   case ProfileNameMsg.emptyProfileName:
@@ -72,46 +75,53 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
       builder: (context, state) {
         return Center(
           child: Container(
-            padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 32),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 32),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 32, right: 32, top: 0, bottom: 64),
-                    child: Text(
-                      AppLocalizations.of(context)!.create_profile_description,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                      textAlign: TextAlign.center,
-                    ),
+                  Text(
+                    AppLocalizations.of(context)!.create_profile_description,
+                    style: textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 8, top: 0, bottom: 32),
-                    child: SizedBox(
-                      child: TextField(
-                        maxLength: ProfileLimits.maxNameLimitChar,
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          labelText: localization.profile_name,
-                          border: const OutlineInputBorder(),
-                          helperText: localization.name_profile_example,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _controller.clear();
-                            },
-                          ),
-                        ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 32),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextField(
+                      maxLength: ProfileLimits.maxNameLimitChar,
+                      controller: _controller,
+                      onChanged: (value) {
+                        setState(() {
+                          _controller.text = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: localization.profile_name,
+                        border: const OutlineInputBorder(),
+                        helperText: localization.name_profile_example,
+                        suffixIcon: (_controller.text.isNotEmpty)
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _controller.clear();
+                                    });
+                                  },
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 8, top: 0, bottom: 32),
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, top: 32),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -129,6 +139,9 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
                                       value: Currency.eur, label: Text('EUR')),
                                 ],
                                 selected: <Currency>{currencyView},
+                                style: ButtonStyle(
+                                  iconSize: MaterialStateProperty.all(16.0),
+                                ),
                                 onSelectionChanged:
                                     (Set<Currency> newSelection) {
                                   currencyView = newSelection.first;
@@ -140,29 +153,21 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          showCloseIcon: true,
-                                          content: Text(
-                                              localization.in_development)),
-                                    );
-                                  },
-                                  child: Text(localization.more))
-                            ],
-                          ),
-                        )
+                        TextButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    showCloseIcon: true,
+                                    content: Text(localization.in_development)),
+                              );
+                            },
+                            child: Text(localization.more))
                       ],
                     ),
                   ),
                   Padding(
                       padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 0, bottom: 32),
+                          left: 8, right: 8, top: 32, bottom: 32),
                       child: TextButton(
                           onPressed: () {
                             _profileBloc.add(CreateProfileEvent(

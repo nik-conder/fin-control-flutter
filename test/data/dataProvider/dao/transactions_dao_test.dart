@@ -85,9 +85,26 @@ void main() {
       }
     });
 
+    test("Delete transaction", () async {
+      final transaction = FinTransaction(
+        id: 100500,
+        profileId: 1,
+        type: TransactionType.income,
+        amount: Decimal.parse('100'),
+        datetime: datetime,
+        category: 'category',
+      );
+      final result = await transactionsDao.insertTransaction(transaction);
+
+      expect(100500, result);
+
+      final deletedRows = await transactionsDao.deleteTransaction(transaction);
+      expect(1, deletedRows);
+    });
+
     test('Delete all transactions ', () async {
       final deletedRows = await transactionsDao.deleteAllTransactions();
-      expect(pageSize, deletedRows);
+      expect(20, deletedRows);
     });
   });
 }

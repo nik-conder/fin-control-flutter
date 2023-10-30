@@ -45,6 +45,24 @@ class TransactionsDao {
     }
   }
 
+  Future<int> deleteTransaction(FinTransaction transaction) async {
+    try {
+      final database = await databaseManager.initializeDB();
+      final result = await database.delete(
+        _columnName,
+        where: 'id = ?',
+        whereArgs: [transaction.id],
+      );
+
+      developer.log('Deleted Rows: $result', time: DateTime.now());
+
+      return result;
+    } catch (e) {
+      developer.log('Error deleting transaction: $e', time: DateTime.now());
+      return 0;
+    }
+  }
+
   Future<List<FinTransaction>?> fetchAllTransactions(
       int pageKey, int pageSize) async {
     try {

@@ -41,6 +41,28 @@ class TransactionsRepository {
     }
   }
 
+  Future<int> deleteTransactionById(FinTransaction transaction) async {
+    try {
+      final result = await transactionsDao.deleteTransaction(transaction);
+      developer.log('Deleted Rows: $result', time: DateTime.now());
+      return result;
+    } catch (e) {
+      developer.log('Error deleting transaction: $e', time: DateTime.now());
+      return 0;
+    }
+  }
+
+  Future<int> deleteTransaction(FinTransaction transaction) async {
+    try {
+      final result = await transactionsDao.deleteTransaction(transaction);
+      developer.log('Deleted Rows: $result', time: DateTime.now());
+      return result;
+    } catch (e) {
+      developer.log('Error deleting transaction: $e', time: DateTime.now());
+      return 0;
+    }
+  }
+
   Future<FinTransaction?> getTransaction(int id) async {
     try {
       final result = await transactionsDao.getTransaction(id);

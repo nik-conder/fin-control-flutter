@@ -11,18 +11,22 @@ class HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Row(
-          children: [BoxTipComponent()],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BoxTipComponent(),
+          ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-                child: BoxContentComponent(
-                    paddingContent: const EdgeInsets.all(16),
-                    header: localization.feed,
-                    content: const TransactionsListComponent()))
+            BoxContentComponent(
+              paddingContent: const EdgeInsets.all(16),
+              header: localization.feed,
+              content: const TransactionsListComponent(),
+            ),
           ],
         )
       ],

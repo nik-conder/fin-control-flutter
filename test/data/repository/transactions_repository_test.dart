@@ -79,5 +79,33 @@ void main() {
       expect(transaction1.category, result.category);
       expect(transaction1.note, result.note);
     });
+
+    test("Delete transaction", () async {
+      final transaction = FinTransaction(
+        id: 100500,
+        profileId: 1,
+        type: TransactionType.income,
+        amount: Decimal.parse('100'),
+        datetime: DateTime.now(),
+        category: 'category',
+      );
+      final result =
+          await transactionsRepository.insertTransaction(transaction);
+
+      expect(100500, result);
+
+      final deletedRows =
+          await transactionsRepository.deleteTransaction(transaction);
+      expect(1, deletedRows);
+    });
+
+    test("Delete all transactions", () async {
+      try {
+        final result = await transactionsRepository.deleteAllTransactions();
+        expect(20, result);
+      } catch (e) {
+        fail(e.toString());
+      }
+    });
   });
 }

@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> 
 
     <application
-        android:label="fin_control"
+        android:label="Fin Control App"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">

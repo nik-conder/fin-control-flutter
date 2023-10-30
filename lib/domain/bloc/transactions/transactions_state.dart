@@ -23,3 +23,11 @@ class TransactionsErrorState extends TransactionsState {
 class TransactionsLoadedState extends TransactionsState {
   const TransactionsLoadedState({super.itemList, super.nextPageKey});
 }
+
+class TransactionDeleteErrorState extends TransactionsState {
+  const TransactionDeleteErrorState({super.error});
+}
+
+class TransactionDeleteSuccessState extends TransactionsState {
+  const TransactionDeleteSuccessState({super.itemList, super.nextPageKey});
+}

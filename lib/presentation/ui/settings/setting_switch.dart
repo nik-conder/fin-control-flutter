@@ -7,6 +7,8 @@ class SettingSwitch extends StatelessWidget {
   final bool? isEnabled;
   final Function(bool) onClick;
 
+  static const paddingAll = EdgeInsets.all(8);
+
   SettingSwitch(
       {super.key,
       required this.state,
@@ -25,63 +27,42 @@ class SettingSwitch extends StatelessWidget {
     },
   );
 
-  static const paddingAll = EdgeInsets.all(8);
-
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: paddingAll,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(
-                        left: 4,
-                        top: 4,
-                      ),
-                      child: Flexible(
-                        child: Text(
-                          title,
-                          style: Theme.of(context).textTheme.titleSmall,
-                          softWrap: true,
-                        ),
-                      )),
-                ],
+              Text(
+                title,
+                style: textTheme.titleSmall,
+                softWrap: true,
               ),
               if (description != null)
-                Row(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(
-                          left: 4,
-                          top: 4,
-                        ),
-                        child: Flexible(
-                          child: Text(
-                            // FIXME: text not wrapped
-                            (description != null) ? description! : '',
-                            style: Theme.of(context).textTheme.bodySmall,
-                            softWrap: true,
-                          ),
-                        )),
-                  ],
+                Text(
+                  (description != null) ? description! : '',
+                  style: textTheme.bodySmall,
+                  softWrap: true,
                 ),
             ],
-          ),
-          Column(children: [
-            Switch(
-              value: state,
-              onChanged: onClick,
-              thumbIcon: thumbIcon,
-            ),
-          ])
+          )),
+          Column(
+            children: [
+              Switch(
+                value: state,
+                onChanged: onClick,
+                thumbIcon: thumbIcon,
+              ),
+            ],
+          )
         ],
       ),
     );

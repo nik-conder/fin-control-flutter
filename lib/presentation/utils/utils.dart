@@ -12,4 +12,12 @@ class Utils {
       Currency.rub => "₽",
     };
   }
+
+  static String getFormattedCurrency(Currency currency) {
+    return switch (currency) {
+      Currency.eur => "EUR",
+      Currency.usd => "USD",
+      Currency.rub => "RUB",
+    };
+  }
 }

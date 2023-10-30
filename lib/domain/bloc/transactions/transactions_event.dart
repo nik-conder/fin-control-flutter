@@ -26,3 +26,12 @@ class TransactionAddEvent extends TransactionsEvent {
   @override
   List<Object?> get props => [transaction];
 }
+
+class TransactionDeleteEvent extends TransactionsEvent {
+  final FinTransaction transaction;
+
+  TransactionDeleteEvent(this.transaction);
+
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}
