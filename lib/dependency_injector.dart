@@ -22,43 +22,43 @@ class DependencyInjector {
     // DAO
 
     getIt.registerFactory<SettingsDao>(
-        () => SettingsDao(getIt<DatabaseManager>()));
+            () => SettingsDao(getIt<DatabaseManager>()));
 
     getIt.registerFactory<ProfilesDAO>(
-        () => ProfilesDAO(getIt<DatabaseManager>()));
+            () => ProfilesDAO(getIt<DatabaseManager>()));
 
     getIt.registerFactory<SessionDao>(
-        () => SessionDao(getIt<DatabaseManager>()));
+            () => SessionDao(getIt<DatabaseManager>()));
 
     getIt.registerFactory<TransactionsDao>(
-        () => TransactionsDao(getIt<DatabaseManager>()));
+            () => TransactionsDao(getIt<DatabaseManager>()));
 
     // Repositories
 
     getIt.registerFactory<SettingsRepository>(
-        () => SettingsRepository(getIt<SettingsDao>()));
+            () => SettingsRepository(getIt<SettingsDao>()));
 
     getIt.registerFactory<ProfilesRepository>(
-        () => ProfilesRepository(getIt<ProfilesDAO>()));
+            () => ProfilesRepository(getIt<ProfilesDAO>()));
 
     getIt.registerFactory<SessionRepository>(
-        () => SessionRepository(getIt<SessionDao>()));
+            () => SessionRepository(getIt<SessionDao>()));
 
     getIt.registerFactory<TransactionsRepository>(
-        () => TransactionsRepository(getIt<TransactionsDao>()));
+            () => TransactionsRepository(getIt<TransactionsDao>()));
 
     // BloCs
     getIt.registerFactory<ThemeBloc>(
-        () => ThemeBloc(getIt<SettingsRepository>()));
+            () => ThemeBloc(getIt<SettingsRepository>()));
 
     getIt.registerFactory<ProfileBloc>(() => ProfileBloc());
 
     getIt.registerFactory<SettingsBloc>(
-        () => SettingsBloc(getIt<SettingsRepository>()));
+            () => SettingsBloc(getIt<SettingsRepository>()));
 
     getIt.registerFactory<SessionBloc>(() => SessionBloc());
 
     getIt.registerFactory<TransactionsBloc>(
-        () => TransactionsBloc(getIt<TransactionsRepository>()));
+            () => TransactionsBloc(getIt<TransactionsRepository>()));
   }
 }
