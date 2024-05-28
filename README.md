@@ -2,6 +2,12 @@
 
 A new Flutter project.
 
+flutter clean
+flutter pub get
+flutter run
+flutter gen-l10n
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
