@@ -2,10 +2,10 @@
 
 A new Flutter project.
 
-flutter clean
-flutter pub get
-flutter run
-flutter gen-l10n
+- flutter clean
+- flutter pub get
+- flutter run
+- flutter gen-l10n
 
 
 ## Getting Started
