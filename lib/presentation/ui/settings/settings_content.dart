@@ -1,5 +1,6 @@
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/repository/settings_repository.dart';
+import 'package:fin_control/domain/bloc/debug/debug_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
@@ -12,6 +13,9 @@ import 'package:fin_control/presentation/ui/settings/setting_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../domain/bloc/debug/debug_event.dart';
+import '../../../domain/bloc/debug/debug_state.dart';
 
 class SettingsContent extends StatelessWidget {
   final Profile profile;
@@ -28,6 +32,7 @@ class SettingsContent extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => SettingsBloc(settingsRepository)),
+          BlocProvider(create: (context) => DebugBloc()),
         ],
         child: Center(
           child: Column(children: [
@@ -134,18 +139,24 @@ class SettingsContent extends StatelessWidget {
                             onClick: (newValue) => {},
                           ),
                           SettingSwitch(
-                            state: false,
-                            title: 'Debug mode',
-                            description: 'Option for development',
-                            onClick: (newValue) => {},
-                          ),
-                          SettingSwitch(
                             state: false, // TODO: default value is true
                             title: localization.transaction_grid,
                             description:
                                 localization.transaction_grid_description,
                             onClick: (newValue) => {},
-                          )
+                          ),
+                          BlocBuilder<DebugBloc, DebugState>(
+                              builder: (context, state) {
+                            return SettingSwitch(
+                              state: state.debugOn,
+                              title: 'Debug mode',
+                              description: 'Option for development',
+                              onClick: (newValue) => {
+                                BlocProvider.of<DebugBloc>(context)
+                                    .add(DebugOnEvent()),
+                              },
+                            );
+                          })
                         ],
                       );
                     }),
