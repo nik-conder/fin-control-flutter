@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/models/transaction.dart';
@@ -111,10 +113,19 @@ class _HomePageState extends State<HomePage> {
                             profile.name,
                             style: textTheme.headlineMedium,
                           ),
-                          Text(
-                            "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                            style: textTheme.titleLarge,
-                          ),
+                          Tooltip(
+                            message: "Your current balance (Hidden)",
+                            child: ImageFiltered(
+                              imageFilter: ImageFilter.blur(
+                                sigmaX: 6.0,
+                                sigmaY: 4.0,
+                              ),
+                              child: Text(
+                                "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                style: textTheme.titleLarge,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -142,9 +153,15 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.only(
                                   left: 8, top: 4, right: 8, bottom: 4),
                               color: colorScheme.background,
-                              child: Text(
-                                "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                                style: textTheme.titleSmall,
+                              child: ImageFiltered(
+                                imageFilter: ImageFilter.blur(
+                                  sigmaX: 6.0,
+                                  sigmaY: 4.0,
+                                ),
+                                child: Text(
+                                  "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                  style: textTheme.titleSmall,
+                                ),
                               ),
                             ))
                       ],

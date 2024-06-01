@@ -111,6 +111,7 @@ class _AddTransactionComponentState extends State<AddTransactionComponent> {
                               selected: <TransactionType>{
                                 currentType
                               },
+                              showSelectedIcon: false,
                               onSelectionChanged:
                                   (Set<TransactionType> newSelection) {
                                 currentType = newSelection.first;

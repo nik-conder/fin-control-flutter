@@ -46,7 +46,7 @@ class BoxContentComponent extends StatelessWidget {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(16),
                           child: Container(
-                              color: colorScheme.secondaryContainer,
+                              color: colorScheme.onInverseSurface,
                               child: Padding(
                                   padding: paddingContent, child: content))))
                 ],

@@ -85,8 +85,8 @@ class SettingsContent extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 8),
                               child: TextButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/login');
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/login', (route) => false);
                                   },
                                   child: Text(localization.logout)),
                             ),
