@@ -150,22 +150,20 @@ class _HomePageState extends State<HomePage> {
                             clipBehavior: Clip.antiAlias,
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                                padding: const EdgeInsets.only(
-                                    left: 8, top: 4, right: 8, bottom: 4),
-                                color: colorScheme.background,
-                                child: Tooltip(
-                                  message: "Your current balance (Hidden)",
-                                  child: ImageFiltered(
-                                    imageFilter: ImageFilter.blur(
-                                      sigmaX: 6.0,
-                                      sigmaY: 4.0,
-                                    ),
-                                    child: Text(
-                                      "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                                      style: textTheme.titleSmall,
-                                    ),
-                                  ),
-                                )))
+                              padding: const EdgeInsets.only(
+                                  left: 8, top: 4, right: 8, bottom: 4),
+                              color: colorScheme.background,
+                              child: ImageFiltered(
+                                imageFilter: ImageFilter.blur(
+                                  sigmaX: 6.0,
+                                  sigmaY: 4.0,
+                                ),
+                                child: Text(
+                                  "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                  style: textTheme.titleSmall,
+                                ),
+                              ),
+                            ))
                       ],
                     ),
                   ));
