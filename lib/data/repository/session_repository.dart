@@ -17,12 +17,7 @@ class SessionRepository {
   }
 
   Future<Session?> getSession() async {
-    try {
-      return await sessionDao.getSession();
-    } catch (e) {
-      developer.log('Error getting session: $e', time: DateTime.now());
-      return null;
-    }
+    return await sessionDao.getSession();
   }
 
   Future<int> deleteSessions() async {

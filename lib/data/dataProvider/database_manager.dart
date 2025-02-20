@@ -44,7 +44,7 @@ class SQLiteDatabase implements DatabaseManager {
     dbPath = await _getDBPath();
 
     // If current mode is debug, use inMemoryDatabasePath
-    if (kDebugMode) {
+    if (!kDebugMode) {
       db = await databaseFactory.openDatabase(inMemoryDatabasePath,
           options: OpenDatabaseOptions(
             version: version,

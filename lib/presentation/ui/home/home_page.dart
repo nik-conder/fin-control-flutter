@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
 
   bool _showWidgetInAppBar = false;
 
-  final double _appBarHeight = 200.0; // Высота SliverAppBar
-  double _borderRadius = 50.0; // Радиус скругления нижних краев
+  final double _appBarHeight = 200.0;
+  double _borderRadius = 50.0;
 
   @override
   void initState() {
@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final Profile profile = args['profile'];
+    // final args =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    //final Profile profile = args['profile'];
 
     final localization = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
@@ -109,23 +109,14 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            profile.name,
-                            style: textTheme.headlineMedium,
-                          ),
-                          Tooltip(
-                            message: "Your current balance (Hidden)",
-                            child: ImageFiltered(
-                              imageFilter: ImageFilter.blur(
-                                sigmaX: 6.0,
-                                sigmaY: 4.0,
-                              ),
-                              child: Text(
-                                "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                                style: textTheme.titleLarge,
-                              ),
-                            ),
-                          )
+                          // Text(
+                          //   profile.name,
+                          //   style: textTheme.headlineMedium,
+                          // ),
+                          // Text(
+                          //   "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                          //   style: textTheme.titleLarge,
+                          // )
                         ],
                       ),
                     ),
@@ -152,16 +143,16 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               padding: const EdgeInsets.only(
                                   left: 8, top: 4, right: 8, bottom: 4),
-                              color: colorScheme.background,
+                              color: colorScheme.surface,
                               child: ImageFiltered(
                                 imageFilter: ImageFilter.blur(
                                   sigmaX: 6.0,
                                   sigmaY: 4.0,
                                 ),
-                                child: Text(
-                                  "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                                  style: textTheme.titleSmall,
-                                ),
+                                // child: Text(
+                                //   "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                //   style: textTheme.titleSmall,
+                                // ),
                               ),
                             ))
                       ],
@@ -188,8 +179,8 @@ class _HomePageState extends State<HomePage> {
                 message: localization.settings,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/settings',
-                        arguments: {'profile': profile});
+                    // Navigator.pushNamed(context, '/settings',
+                    //     arguments: {'profile': profile});
                   },
                   icon: const Icon(Icons.settings_outlined),
                 ),

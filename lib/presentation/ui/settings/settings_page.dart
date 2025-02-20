@@ -8,10 +8,10 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, Profile>;
+    // final args =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, Profile>;
 
-    final Profile profile = args.values.first;
+    //final Profile profile = args.values.first;
 
     return Scaffold(
       appBar: AppBar(
@@ -23,9 +23,9 @@ class SettingsPage extends StatelessWidget {
         ),
         title: Text(AppLocalizations.of(context)!.settings),
       ),
-      body: SingleChildScrollView(
-        child: SettingsContent(profile: profile),
-      ),
+      // body: SingleChildScrollView(
+      //   child: SettingsContent(profile: profile),
+      // ),
     );
   }
 }
