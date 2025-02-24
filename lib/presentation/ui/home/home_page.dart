@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:fin_control/config.dart';
-import 'package:fin_control/data/models/profile.dart';
 import 'package:fin_control/data/models/transaction.dart';
+import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/session/session_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
@@ -10,10 +10,13 @@ import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/presentation/ui/components/add_transaction_component.dart';
 import 'package:fin_control/presentation/ui/home/home_content.dart';
-import 'package:fin_control/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../domain/bloc/profile/profile_event.dart';
+import '../../utils/utils.dart';
+import '../info_content.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,6 +37,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    context.read<ProfileBloc>().add(GetLoginProfile());
+
     currentType = TransactionType.expense;
     _scrollController.addListener(() {
       setState(() {
@@ -50,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return const AddTransactionComponent();
       },
@@ -65,10 +70,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final args =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    //final Profile profile = args['profile'];
-
     final localization = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -109,14 +110,28 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Text(
-                          //   profile.name,
-                          //   style: textTheme.headlineMedium,
-                          // ),
-                          // Text(
-                          //   "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                          //   style: textTheme.titleLarge,
-                          // )
+                          BlocBuilder<ProfileBloc, ProfileState>(
+                              builder: (context, state) {
+                            if (state is LoginProfileSuccess) {
+                              final profile = state.profile;
+                              return Column(
+                                children: [
+                                  Text(
+                                    "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                    style: textTheme.headlineMedium,
+                                  ),
+                                  Text(
+                                    profile.name,
+                                    style: textTheme.titleSmall,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          }),
                         ],
                       ),
                     ),
@@ -149,10 +164,11 @@ class _HomePageState extends State<HomePage> {
                                   sigmaX: 6.0,
                                   sigmaY: 4.0,
                                 ),
-                                // child: Text(
-                                //   "${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
-                                //   style: textTheme.titleSmall,
-                                // ),
+                                child: Text(
+                                  '0',
+                                  //"${Utils.getFormattedCurrencyToSymbol(profile.currency)} ${profile.balance}",
+                                  style: textTheme.titleSmall,
+                                ),
                               ),
                             ))
                       ],

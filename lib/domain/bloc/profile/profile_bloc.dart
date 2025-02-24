@@ -1,84 +1,61 @@
-import 'dart:async';
-import 'dart:developer' as developer;
-import 'dart:math';
-import 'package:decimal/decimal.dart';
-import 'package:fin_control/config.dart';
-import 'package:fin_control/data/models/currency.dart';
+import 'package:fin_control/core/logger.dart';
 import 'package:fin_control/data/models/profile.dart';
-import 'package:fin_control/data/models/transaction.dart';
 import 'package:fin_control/data/repository/profiles_repository.dart';
-import 'package:fin_control/data/repository/transactions_repository.dart';
-import 'package:fin_control/presentation/utils/sysmsg.dart';
 import 'package:fin_control/domain/bloc/profile/profile_event.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
-import 'package:rxdart/rxdart.dart';
+
+import '../../../config.dart';
+import '../../../data/repository/session_repository.dart';
+import '../../../presentation/utils/sysmsg.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final _profilesRepository = GetIt.instance<ProfilesRepository>();
-  final _transactionsRepository = GetIt.instance<TransactionsRepository>();
+  final SessionRepository _sessionRepository;
+  final ProfilesRepository _profilesRepository;
 
-  final BehaviorSubject<double> _balanceSubject = BehaviorSubject<double>();
-
-  Stream<double> get balanceStream => _balanceSubject.stream;
-
-  final BehaviorSubject<List<Profile>> _profilesSubject =
-      BehaviorSubject<List<Profile>>();
-
-  Stream<List<Profile>> get profilesStream => _profilesSubject.stream;
-
-  ProfileBloc() : super(ProfileInitial()) {
+  ProfileBloc(this._sessionRepository, this._profilesRepository)
+      : super(ProfileInitial()) {
+    on<GetListProfiles>(_getListProfiles);
+    on<GetLoginProfile>(_getLoginProfile);
     on<CreateProfileEvent>(_createProfile);
-    on<CreateDemoProfileEvent>(_createDemoProfile);
     on<UpdateProfilesListEvent>(_updateProfilesList);
-    on<ChangeBalance>(
-      (event, emit) async {
-        await _changeBalance(event, emit);
-      },
-    );
-    on<UpdateBalance>(
-      (event, emit) async {
-        await _updateBalance(event, emit);
-      },
-    );
+    on<DeleteProfile>(_deleteProfile);
   }
 
-  _updateProfilesList(
-      UpdateProfilesListEvent event, Emitter<ProfileState> emit) async {
-    final result = _profilesRepository.getAllProfiles();
+  void _getListProfiles(
+      GetListProfiles event, Emitter<ProfileState> emit) async {
+    emit(ListProfilesLoading());
+    final listProfiles = await _profilesRepository.getAllProfiles();
 
-    result.listen((event) {
-      if (event.isNotEmpty) _profilesSubject.sink.add(event);
-      print(profilesStream.length);
-    }, onError: (error) {
-      _profilesSubject.addError(error);
-    });
+    if (listProfiles!.isNotEmpty) {
+      emit(ListProfilesSuccess(listProfiles));
+    } else {
+      emit(ListProfilesError());
+    }
   }
 
-  _updateBalance(UpdateBalance event, Emitter<ProfileState> emit) async {
-    final result = await _profilesRepository.getBalance(1); // FIXME
-    _balanceSubject.add(result);
-  }
+  _getLoginProfile(GetLoginProfile event, Emitter<ProfileState> emit) async {
+    final sessionProfile = await _sessionRepository.getSession();
 
-  _changeBalance(ChangeBalance event, Emitter<ProfileState> emit) async {
-    final random = Random();
-    double randomDouble = 100 + random.nextDouble() * (10000 - 100);
-    try {
-      final result =
-          await _profilesRepository.updateBalance(event.id, randomDouble);
-
-      if (result == 1) add(UpdateBalance());
-    } catch (e) {
-      developer.log('', time: DateTime.now(), error: e.toString());
+    if (sessionProfile == null) {
+      emit(LoginProfileError());
+      return;
+    } else {
+      if (sessionProfile.id != 0 && sessionProfile.profileId != 0) {
+        logger.i(
+            'Session: id: ${sessionProfile.id}, profile id ${sessionProfile.profileId}');
+        final profile =
+            await _profilesRepository.getProfile(sessionProfile.profileId);
+        logger.i('Profile ${profile.id} ${profile.name} logged in');
+        emit(LoginProfileSuccess(profile));
+      } else {
+        emit(LoginProfileError());
+      }
     }
   }
 
   _createProfile(CreateProfileEvent event, Emitter<ProfileState> emit) {
-    emit(ProfileInitial()); // TODO костыль
-
     if (event.name.isEmpty) {
       emit(const CreateProfileError(ProfileNameMsg.emptyProfileName));
     } else if (event.name.length < ProfileLimits.minNameLimitChar) {
@@ -90,48 +67,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final profile = Profile(name: event.name, currency: event.currency);
         _profilesRepository.insertProfile(profile);
         emit(CreateProfileSuccess());
+        logger.i('Profile ${event.name} created');
       } catch (e) {
-        developer.log('',
-            time: DateTime.now(), error: 'Error: ${e.toString()}');
+        logger.e('Error: ${e.toString()}');
         emit(const CreateProfileError(ProfileNameMsg.errorCreateProfile));
       }
     }
   }
 
-  _createDemoProfile(
-      CreateDemoProfileEvent event, Emitter<ProfileState> emit) async {
-    try {
-      final profile =
-          Profile(name: 'Demo', currency: Currency.eur, balance: 12345);
-      _profilesRepository.insertProfile(profile);
-
-      final random = Random();
-
-      for (int i = 0; i < 10; i++) {
-        double randomDouble = 100 + random.nextDouble() * (10000 - 100);
-        final transaction = FinTransaction(
-            profileId: 1,
-            type: random.nextBool()
-                ? TransactionType.income
-                : TransactionType.expense,
-            amount: Decimal.parse(randomDouble.toString()),
-            datetime: DateTime.now(),
-            category: 'test',
-            note: 'Note $i');
-        await _transactionsRepository.insertTransaction(transaction);
-      }
-
-      add(UpdateProfilesListEvent());
-
-      emit(CreateProfileSuccess());
-    } catch (e) {
-      developer.log('', time: DateTime.now(), error: 'Error: ${e.toString()}');
-      emit(const CreateProfileError(ProfileNameMsg.errorCreateProfile));
-    }
+  _updateProfilesList(
+      UpdateProfilesListEvent event, Emitter<ProfileState> emit) async {
+    add(GetListProfiles());
   }
 
-  void dispose() {
-    _profilesSubject.close();
-    _balanceSubject.close();
+  _deleteProfile(DeleteProfile event, Emitter<ProfileState> emit) async {
+    await _profilesRepository.deleteProfile(event.profile);
+    add(GetListProfiles());
   }
+
+  void dispose() {}
 }

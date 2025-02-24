@@ -2,7 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:fin_control/config.dart';
 import 'package:fin_control/data/dataProvider/dao/transactions_dao.dart';
 import 'package:fin_control/data/models/transaction.dart';
-import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/core/dependency_injector.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 

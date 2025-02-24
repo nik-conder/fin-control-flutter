@@ -6,7 +6,7 @@ enum InfoPageType { notProfile, loading, noData, hiddenBalance }
 class InfoContent extends StatelessWidget {
   final InfoPageType pageType;
 
-  const InfoContent({super.key, required this.pageType});
+  const InfoContent(this.pageType, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

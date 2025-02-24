@@ -11,6 +11,9 @@ class CalculatorPage extends StatefulWidget {
 class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
-    return const CalculatorContent();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Calculator')),
+      body: Container(child: CalculatorContent()),
+    );
   }
 }

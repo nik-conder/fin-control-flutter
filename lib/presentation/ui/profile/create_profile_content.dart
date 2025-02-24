@@ -17,7 +17,7 @@ class CreateProfileContent extends StatefulWidget {
 class _CreateProfileContentState extends State<CreateProfileContent> {
   Currency currencyView = Currency.usd;
 
-  final _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   late ProfileBloc _profileBloc;
   final bool clearText = false;
@@ -25,6 +25,17 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
   @override
   void initState() {
     _profileBloc = BlocProvider.of<ProfileBloc>(context);
+
+    _controller.addListener(() {
+      final String text = _controller.text;
+      _controller.value = _controller.value.copyWith(
+        text: text,
+        selection:
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
+
     super.initState();
   }
 
@@ -94,11 +105,6 @@ class _CreateProfileContentState extends State<CreateProfileContent> {
                     child: TextField(
                       maxLength: ProfileLimits.maxNameLimitChar,
                       controller: _controller,
-                      onChanged: (value) {
-                        setState(() {
-                          _controller.text = value;
-                        });
-                      },
                       decoration: InputDecoration(
                         labelText: localization.profile_name,
                         border: const OutlineInputBorder(),

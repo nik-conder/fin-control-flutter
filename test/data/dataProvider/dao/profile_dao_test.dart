@@ -1,7 +1,7 @@
 import 'package:fin_control/data/dataProvider/dao/profiles_dao.dart';
 import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/data/models/profile.dart';
-import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/core/dependency_injector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';

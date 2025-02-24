@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:fin_control/data/repository/settings_repository.dart';
-import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/core/dependency_injector.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';

@@ -1,5 +1,5 @@
 import 'package:fin_control/data/repository/settings_repository.dart';
-import 'package:fin_control/dependency_injector.dart';
+import 'package:fin_control/core/dependency_injector.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 
