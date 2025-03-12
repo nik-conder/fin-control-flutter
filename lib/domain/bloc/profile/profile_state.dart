@@ -9,39 +9,25 @@ class ProfileState extends Equatable {
 
 class ProfileInitial extends ProfileState {}
 
-class ProfileLoadSuccess extends ProfileState {
+class LoginProfileSuccess extends ProfileState {
   final Profile profile;
 
-  const ProfileLoadSuccess(this.profile);
+  const LoginProfileSuccess(this.profile);
 }
 
-@immutable
-class ProfileLoaded extends ProfileState {
-  final Profile profile;
+class LoginProfileError extends ProfileState {}
 
-  const ProfileLoaded(this.profile);
+class LoginProfileEmpty extends ProfileState {}
 
-  @override
-  List<Object?> get props => [profile];
+class ListProfilesLoading extends ProfileState {}
+
+class ListProfilesSuccess extends ProfileState {
+  final List<Profile> profiles;
+
+  const ListProfilesSuccess(this.profiles);
 }
 
-class GetBalanceSuccess extends ProfileState {
-  final double balance;
-
-  const GetBalanceSuccess(this.balance);
-
-  @override
-  List<Object?> get props => [balance];
-}
-
-class ProfileError extends ProfileState {
-  final String message;
-
-  const ProfileError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
+class ListProfilesError extends ProfileState {}
 
 class CreateProfileSuccess extends ProfileState {}
 

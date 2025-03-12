@@ -37,4 +37,20 @@ class ChangeBalance extends ProfileEvent {
   ChangeBalance(this.id, this.balance);
 }
 
+class LoginProfile extends ProfileEvent {
+  final Profile profile;
+
+  LoginProfile(this.profile);
+}
+
+class GetListProfiles extends ProfileEvent {}
+
+class GetLoginProfile extends ProfileEvent {}
+
 class UpdateProfilesListEvent extends ProfileEvent {}
+
+class DeleteProfile extends ProfileEvent {
+  final Profile profile;
+
+  DeleteProfile(this.profile);
+}

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'package:fin_control/core/logger.dart';
 import 'package:fin_control/data/dataProvider/database_manager.dart';
 import 'package:fin_control/data/models/currency.dart';
 import 'package:fin_control/data/models/profile.dart';
@@ -83,17 +84,29 @@ class ProfilesDAO {
     }
   }
 
-  Stream<List<Profile>> getAllProfiles() async* {
+  Future<List<Profile>?> getAllProfiles() async {
     try {
       final database = await databaseManager.initializeDB();
       final result = await database.query(_columnName);
       final profiles = List.generate(result.length, (i) {
         return Profile.fromMap(result[i]);
       });
-      yield* Stream.value(profiles);
+      return profiles;
     } catch (e) {
       developer.log('Error getting all profiles: $e', time: DateTime.now());
-      yield* Stream.error(e);
-    } // Опрашивать базу каждые 5 секунд (или другой интервал)
+      return null;
+    }
+  }
+
+  Future<bool> deleteProfile(Profile profile) async {
+    try {
+      final database = await databaseManager.initializeDB();
+      final res = await database
+          .delete(_columnName, where: 'id = ?', whereArgs: [profile.id]);
+      return res > 0;
+    } catch (e) {
+      logger.e('Error deleting profile: $e', time: DateTime.now());
+      return false;
+    }
   }
 }

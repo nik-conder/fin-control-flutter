@@ -1,38 +1,43 @@
-import 'package:fin_control/data/models/profile.dart';
-import 'package:fin_control/data/repository/settings_repository.dart';
-import 'package:fin_control/domain/bloc/debug/debug_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
+import 'package:fin_control/main.dart';
 import 'package:fin_control/presentation/ui/components/box_page_component.dart';
-import 'package:fin_control/presentation/utils/utils.dart';
+import 'package:fin_control/presentation/ui/components/setting_token_component.dart';
+import 'package:fin_control/presentation/ui/info_content.dart';
 import 'package:flutter/material.dart';
 import 'package:fin_control/presentation/ui/settings/setting_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../../domain/bloc/debug/debug_event.dart';
-import '../../../domain/bloc/debug/debug_state.dart';
+import '../../utils/utils.dart';
+import '../components/accounts_list_component.dart';
 
-class SettingsContent extends StatelessWidget {
-  final Profile profile;
+class SettingsContent extends StatefulWidget {
+  const SettingsContent({super.key});
 
-  const SettingsContent({super.key, required this.profile});
+  @override
+  State<SettingsContent> createState() => _SettingsContentState();
+}
 
-  static const double indent = 8;
+class _SettingsContentState extends State<SettingsContent> {
+  @override
+  void initState() {
+    super.initState();
+
+    //context.read<AccountBloc>().add(FetchAccounts());
+  }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    final settingsRepository = GetIt.instance<SettingsRepository>();
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsBloc(settingsRepository)),
-          BlocProvider(create: (context) => DebugBloc()),
+          BlocProvider(create: (context) => GetIt.I<SettingsBloc>()),
         ],
         child: Center(
           child: Column(children: [
@@ -41,67 +46,85 @@ class SettingsContent extends StatelessWidget {
               header: localization.profile,
               content: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Text(
-                              "\uD83D\uDC64",
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          ),
-                          Text(profile.name,
-                              style: Theme.of(context).textTheme.titleMedium),
-                          Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Container(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, top: 4, right: 8, bottom: 4),
-                                    child: Text(
-                                        Utils.getFormattedCurrency(
-                                            profile.currency),
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold)),
-                                  )),
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 12, bottom: 12, right: 12),
-                        child: Row(
+                  if (state is LoginProfileSuccess) {
+                    final profile = state.profile;
+                    return Column(
+                      children: [
+                        Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/login', (route) => false);
-                                  },
-                                  child: Text(localization.logout)),
+                            const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Text(
+                                "\uD83D\uDC64",
+                                style: TextStyle(fontSize: 24),
+                              ),
                             ),
+                            Text(profile.name,
+                                style: Theme.of(context).textTheme.titleMedium),
                             Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: TextButton(
-                                  onPressed: null,
-                                  child: Text(localization.delete)),
-                            ),
+                              padding: const EdgeInsets.all(12),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Container(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, top: 4, right: 8, bottom: 4),
+                                      child: Text(
+                                          Utils.getFormattedCurrency(
+                                              profile.currency),
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+                                    )),
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                    ],
-                  );
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12, bottom: 12, right: 12),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (route) => false);
+                                    },
+                                    child: Text(localization.logout)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: TextButton(
+                                    onPressed: null,
+                                    child: Text(localization.delete)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return InfoContent(InfoPageType.noData);
+                  }
                 },
+              ),
+            ),
+            BoxContentComponent(
+                paddingContent: const EdgeInsets.all(4),
+                header: 'Аккаунты',
+                content: AccountsListComponent()),
+            const BoxContentComponent(
+              paddingContent: EdgeInsets.all(4),
+              header: 'Токен',
+              content: Column(
+                children: [
+                  SettingTokenComponent(),
+                ],
               ),
             ),
             BoxContentComponent(
@@ -114,7 +137,6 @@ class SettingsContent extends StatelessWidget {
                       return Column(
                         children: [
                           BlocBuilder<ThemeBloc, ThemeState>(
-                              // TODO join bloc to SettingsBloc
                               builder: (context, state) {
                             return SettingSwitch(
                               state: state.isDarkMode,
@@ -145,18 +167,6 @@ class SettingsContent extends StatelessWidget {
                                 localization.transaction_grid_description,
                             onClick: (newValue) => {},
                           ),
-                          BlocBuilder<DebugBloc, DebugState>(
-                              builder: (context, state) {
-                            return SettingSwitch(
-                              state: state.debugOn,
-                              title: 'Debug mode',
-                              description: 'Option for development',
-                              onClick: (newValue) => {
-                                BlocProvider.of<DebugBloc>(context)
-                                    .add(DebugOnEvent()),
-                              },
-                            );
-                          })
                         ],
                       );
                     }),
