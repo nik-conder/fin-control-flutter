@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'dart:developer' as developer;
+import 'package:fin_control/core/logger.dart';
 import 'package:fin_control/data/models/session.dart';
 import 'package:fin_control/data/repository/session_repository.dart';
 import 'package:fin_control/domain/bloc/session/session_event.dart';
@@ -31,7 +29,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         emit(const SessionError("Error get"));
       }
     } catch (e) {
-      developer.log('', time: DateTime.now(), error: e.toString());
+      logger.e(e);
     }
   }
 
@@ -50,7 +48,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
           .insertSession(Session(profileId: event.profile.id!));
       add(SessionGetEvent());
     } catch (e) {
-      developer.log('', time: DateTime.now(), error: e.toString());
+      logger.e(e);
     }
   }
 

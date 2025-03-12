@@ -24,7 +24,7 @@ class TokenBloc extends Bloc<TokenEvent, TokenState> {
       // developer.log('token: $token', time: DateTime.now());
       emit(GetTokenLoading());
 
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 3));
 
       final result = await _authUseCase.getToken('token');
       logger.e(result);

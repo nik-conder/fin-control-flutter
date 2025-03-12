@@ -1,8 +1,5 @@
-import 'package:fin_control/data/repository/token_repository.dart';
-
 import '../../data/models/settings.dart';
 import '../../data/repository/settings_repository.dart';
-import '../../data/services/encryptor.dart';
 
 class SettingsUseCase {
   final SettingsRepository _settingsRepository;
