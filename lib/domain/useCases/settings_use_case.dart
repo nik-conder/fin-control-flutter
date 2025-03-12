@@ -1,5 +1,8 @@
+import 'package:fin_control/data/repository/token_repository.dart';
+
 import '../../data/models/settings.dart';
 import '../../data/repository/settings_repository.dart';
+import '../../data/services/encryptor.dart';
 
 class SettingsUseCase {
   final SettingsRepository _settingsRepository;
@@ -22,13 +25,5 @@ class SettingsUseCase {
   Future<bool> getDarkModeSetting() async {
     final result = _settingsRepository.getDarkModeSetting();
     return result;
-  }
-
-  Future<void> saveToken(String token) async {
-    await _settingsRepository.saveToken(token);
-  }
-
-  Future<String?> getToken() async {
-    return await _settingsRepository.getToken();
   }
 }

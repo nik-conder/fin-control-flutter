@@ -1,6 +1,7 @@
 import 'package:fin_control/data/repository/profiles_repository.dart';
 import 'package:fin_control/data/repository/session_repository.dart';
-import 'package:fin_control/domain/bloc/account/account_bloc.dart';
+import 'package:fin_control/domain/bloc/token/token_bloc.dart';
+import 'package:fin_control/domain/useCases/auth_use_case.dart';
 import 'package:fin_control/domain/useCases/settings_use_case.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,6 +30,11 @@ class PresentationModule {
     getIt.registerFactory<TransactionsBloc>(
         () => TransactionsBloc(getIt<TransactionsRepository>()));
 
-    getIt.registerFactory<AccountBloc>(() => AccountBloc(getIt()));
+    getIt.registerFactory<TokenBloc>(
+      () => TokenBloc(
+        getIt<SettingsUseCase>(),
+        getIt<AuthUseCase>(),
+      ),
+    );
   }
 }

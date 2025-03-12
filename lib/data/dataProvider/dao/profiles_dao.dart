@@ -95,7 +95,7 @@ class ProfilesDAO {
     } catch (e) {
       developer.log('Error getting all profiles: $e', time: DateTime.now());
       return null;
-    } // Опрашивать базу каждые 5 секунд (или другой интервал)
+    }
   }
 
   Future<bool> deleteProfile(Profile profile) async {

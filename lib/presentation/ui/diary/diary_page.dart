@@ -1,9 +1,4 @@
-import 'package:fin_control/domain/bloc/account/account_bloc.dart';
-import 'package:fin_control/domain/bloc/account/account_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'diary_content.dart';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key});
@@ -26,20 +21,20 @@ class _DiaryPageState extends State<DiaryPage> {
                 children: [
                   Text('Diary'),
                   Spacer(),
-                  BlocBuilder<AccountBloc, AccountState>(
-                      builder: (context, state) {
-                    if (state is AccountLoading) {
-                      return const CircularProgressIndicator();
-                    }
-                    if (state is AccountLoaded) {
-                      return Text(
-                        state.accounts.first.id,
-                        style: Theme.of(context).textTheme.labelSmall,
-                      );
-                    } else {
-                      return Text('...');
-                    }
-                  })
+                  // BlocBuilder<AccountBloc, AccountState>(
+                  //     builder: (context, state) {
+                  //   if (state is AccountLoading) {
+                  //     return const CircularProgressIndicator();
+                  //   }
+                  //   if (state is AccountLoaded) {
+                  //     return Text(
+                  //       state.accounts.first.id,
+                  //       style: Theme.of(context).textTheme.labelSmall,
+                  //     );
+                  //   } else {
+                  //     return Text('...');
+                  //   }
+                  // })
                 ],
               ),
               pinned: true,

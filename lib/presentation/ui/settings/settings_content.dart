@@ -1,5 +1,3 @@
-import 'package:fin_control/data/repository/settings_repository.dart';
-import 'package:fin_control/domain/bloc/account/account_bloc.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/settings/settings_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
@@ -7,15 +5,14 @@ import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
 import 'package:fin_control/main.dart';
 import 'package:fin_control/presentation/ui/components/box_page_component.dart';
+import 'package:fin_control/presentation/ui/components/setting_token_component.dart';
 import 'package:fin_control/presentation/ui/info_content.dart';
 import 'package:flutter/material.dart';
 import 'package:fin_control/presentation/ui/settings/setting_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../../domain/bloc/account/account_event.dart';
-import '../../../domain/bloc/account/account_state.dart';
 import '../../utils/utils.dart';
 import '../components/accounts_list_component.dart';
 
@@ -31,17 +28,16 @@ class _SettingsContentState extends State<SettingsContent> {
   void initState() {
     super.initState();
 
-    context.read<AccountBloc>().add(FetchAccounts());
+    //context.read<AccountBloc>().add(FetchAccounts());
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
 
-    final settingsRepository = GetIt.instance<SettingsRepository>();
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => getIt<SettingsBloc>()),
+          BlocProvider(create: (context) => GetIt.I<SettingsBloc>()),
         ],
         child: Center(
           child: Column(children: [
@@ -122,6 +118,15 @@ class _SettingsContentState extends State<SettingsContent> {
                 paddingContent: const EdgeInsets.all(4),
                 header: 'Аккаунты',
                 content: AccountsListComponent()),
+            const BoxContentComponent(
+              paddingContent: EdgeInsets.all(4),
+              header: 'Токен',
+              content: Column(
+                children: [
+                  SettingTokenComponent(),
+                ],
+              ),
+            ),
             BoxContentComponent(
                 paddingContent: const EdgeInsets.all(4),
                 header: localization.settings,

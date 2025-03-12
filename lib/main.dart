@@ -1,9 +1,11 @@
 import 'package:fin_control/config.dart';
+import 'package:fin_control/core/di/dependencies_injection.dart';
 import 'package:fin_control/domain/bloc/profile/profile_bloc.dart';
 import 'package:fin_control/domain/bloc/session/session_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_bloc.dart';
 import 'package:fin_control/domain/bloc/theme/theme_event.dart';
 import 'package:fin_control/domain/bloc/theme/theme_state.dart';
+import 'package:fin_control/domain/bloc/token/token_bloc.dart';
 import 'package:fin_control/domain/bloc/transactions/transactions_bloc.dart';
 import 'package:fin_control/presentation/ui/home/btnNavBar.dart';
 import 'package:fin_control/presentation/ui/home/home_page.dart';
@@ -12,26 +14,17 @@ import 'package:fin_control/presentation/ui/profile/create_profile_page.dart';
 import 'package:fin_control/presentation/ui/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'color_schemes.dart';
 import 'package:get_it/get_it.dart';
+import 'color_schemes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'core/di/data_module.dart';
-import 'core/di/domain_module.dart';
-import 'core/di/presentation_module.dart';
-import 'domain/bloc/account/account_bloc.dart';
 import 'domain/bloc/session/session_state.dart';
 
-final GetIt getIt = GetIt.instance;
-
-void setupDependencies() {
-  DataModule.register(getIt);
-  DomainModule.register(getIt);
-  PresentationModule.register(getIt);
-}
+final DependenciesInjection di = DependenciesInjectionImpl();
+GetIt getIt = GetIt.instance;
 
 void main() {
-  setupDependencies();
+  di.init();
   runApp(const MyApp());
 }
 
@@ -61,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => getIt<SessionBloc>()),
           BlocProvider(create: (context) => getIt<ProfileBloc>()),
           BlocProvider(create: (context) => getIt<TransactionsBloc>()),
-          BlocProvider(create: (context) => getIt<AccountBloc>())
+          BlocProvider(create: (context) => getIt<TokenBloc>())
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
           return MaterialApp(
